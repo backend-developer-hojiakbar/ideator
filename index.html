@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>G'oya Mashinasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
+    "docx": "https://aistudiocdn.com/docx@^9.5.1"
+  }
+}
+</script>
+<style>
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        background-color: white;
+    }
+    .no-print {
+        display: none !important;
+    }
+    .print-block {
+        display: block !important;
+    }
+    .print-section {
+        page-break-before: always;
+        padding-top: 1.5rem;
+    }
+    .print-section:first-child {
+        page-break-before: auto;
+        padding-top: 0;
+    }
+    /* Ensure dark mode styles are overridden for printing */
+    .print-block, .print-block div, .print-block span, .print-block p, .print-block h1, .print-block h2, .print-block h3, .print-block h4, .print-block li {
+       background-color: white !important;
+       color: black !important;
+       border-color: #e5e7eb !important;
+    }
+     .print-block [class*="dark:text-cyan-400"] { color: #0891b2 !important; }
+     .print-block [class*="dark:text-green-300"] { color: #15803d !important; }
+     .print-block [class*="dark:text-red-300"] { color: #b91c1c !important; }
+     .print-block [class*="dark:text-blue-300"] { color: #1d4ed8 !important; }
+     .print-block [class*="dark:text-yellow-300"] { color: #a16207 !important; }
+}
+
+:root {
+  --background-blur: 20px;
+  --background: rgba(28, 28, 30, 0.65);
+  --border: rgba(80, 80, 80, 0.8);
+  --shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.25);
+}
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #121212;
+  color: #e5e7eb; /* Default text color (gray-200) */
+  background-image:
+    radial-gradient(at 15% 20%, hsla(210, 90%, 65%, 0.2) 0px, transparent 50%),
+    radial-gradient(at 80% 25%, hsla(30, 90%, 65%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 95% 90%, hsla(340, 80%, 75%, 0.18) 0px, transparent 50%),
+    radial-gradient(at 5% 95%, hsla(170, 80%, 65%, 0.2) 0px, transparent 50%);
+}
+
+.glass-panel {
+  background: var(--background);
+  -webkit-backdrop-filter: blur(var(--background-blur));
+  backdrop-filter: blur(var(--background-blur));
+  border-radius: 1.5rem; /* 24px */
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.liquid-button {
+  background-color: #22d3ee; /* cyan-400 */
+  color: white;
+  border-radius: 9999px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25), inset 0 2px 2px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.liquid-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(34, 211, 238, 0.35), inset 0 2px 2px rgba(255, 255, 255, 0.2);
+}
+
+.ios-input {
+  background-color: rgba(44, 44, 46, 0.8);
+  border: 1px solid rgba(80,80,80,0.8);
+  border-radius: 0.625rem; /* 10px */
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  color: #f3f4f6; /* gray-100 */
+}
+.ios-input::placeholder {
+    color: #6b7280; /* gray-500 */
+}
+.ios-input:focus {
+  background-color: rgba(58, 58, 60, 0.9);
+  border: 1px solid #22d3ee;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.25);
+  outline: none;
+}
+
+.ios-toggle-bg:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+input:checked + .ios-toggle-bg {
+    background-color: #34c759;
+}
+
+input:checked + .ios-toggle-bg:after {
+    transform: translateX(20px);
+}
+
+</style>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
