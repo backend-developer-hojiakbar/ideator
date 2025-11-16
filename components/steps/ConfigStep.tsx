@@ -45,7 +45,7 @@ const CheckboxGroup: React.FC<{ label: string, options: string[], selectedOption
 );
 
 
-const InputGroup: React.FC<{ label: string, value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, placeholder: string, optional?: boolean }> = ({ label, value, onChange, placeholder, optional = false }) => {
+const InputGroup: React.FC<{ label: string, value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, placeholder: string, optional?: boolean, error?: string }> = ({ label, value, onChange, placeholder, optional = false, error }) => {
     const { t } = useLanguage();
     return (
         <div>
@@ -57,13 +57,14 @@ const InputGroup: React.FC<{ label: string, value: string, onChange: (e: React.C
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                className="w-full p-3 text-sm ios-input"
+                className={`w-full p-3 text-sm ios-input ${error ? 'border border-red-500 focus:border-red-500' : ''}`}
             />
+            {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
         </div>
     );
 };
 
-const TextareaGroup: React.FC<{ label: string, value: string, onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void, placeholder: string, optional?: boolean }> = ({ label, value, onChange, placeholder, optional = false }) => {
+const TextareaGroup: React.FC<{ label: string, value: string, onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void, placeholder: string, optional?: boolean, error?: string }> = ({ label, value, onChange, placeholder, optional = false, error }) => {
     const { t } = useLanguage();
     return (
         <div>
@@ -75,8 +76,9 @@ const TextareaGroup: React.FC<{ label: string, value: string, onChange: (e: Reac
                 onChange={onChange}
                 placeholder={placeholder}
                 rows={3}
-                className="w-full p-3 text-sm ios-input"
+                className={`w-full p-3 text-sm ios-input ${error ? 'border border-red-500 focus:border-red-500' : ''}`}
             />
+            {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
         </div>
     );
 };
@@ -96,6 +98,7 @@ export const ConfigStep: React.FC<ConfigStepProps> = ({ onGenerate, error, onBac
     businessModel: [],
     isGoldenTicket: false,
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (field: keyof Omit<IdeaConfiguration, 'isGoldenTicket' | 'businessModel'>) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setConfig(prev => ({ ...prev, [field]: e.target.value }));
@@ -119,6 +122,12 @@ export const ConfigStep: React.FC<ConfigStepProps> = ({ onGenerate, error, onBac
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors: Record<string, string> = {};
+    if (!config.industry.trim()) newErrors.industry = 'Bu maydon majburiy.';
+    if (!config.investment.trim()) newErrors.investment = 'Bu maydon majburiy.';
+    if (!config.complexity) newErrors.complexity = 'Bu maydon majburiy.';
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
     onGenerate(config);
   };
 
@@ -149,6 +158,7 @@ export const ConfigStep: React.FC<ConfigStepProps> = ({ onGenerate, error, onBac
                 value={config.industry} 
                 onChange={handleChange('industry')} 
                 placeholder={t('configStep.industryPlaceholder')} 
+                error={errors.industry}
             />
             <InputGroup 
                 label={t('configStep.topicLabel')} 
@@ -169,8 +179,12 @@ export const ConfigStep: React.FC<ConfigStepProps> = ({ onGenerate, error, onBac
                 value={config.investment} 
                 onChange={handleChange('investment')} 
                 placeholder={t('configStep.investmentPlaceholder')}
+                error={errors.investment}
             />
-            <SelectGroup label={t('configStep.complexityLabel')} value={config.complexity} onChange={handleChange('complexity')} options={complexityLevels} />
+            <div>
+                <SelectGroup label={t('configStep.complexityLabel')} value={config.complexity} onChange={handleChange('complexity')} options={complexityLevels} />
+                {errors.complexity && <p className="mt-1 text-xs text-red-600">{errors.complexity}</p>}
+            </div>
             <CheckboxGroup 
               label={t('configStep.businessModelLabel')} 
               options={businessModels} 

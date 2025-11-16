@@ -10,7 +10,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 interface TopUpPageProps {
     user: User;
-    onTopUpRequest: (amount: number) => void;
+    onTopUpRequest: (amount: number, promo_code?: string) => void;
     onBack: () => void;
 }
 
@@ -39,6 +39,7 @@ export const TopUpPage: React.FC<TopUpPageProps> = ({ user, onTopUpRequest, onBa
     const [step, setStep] = useState<TopUpStep>('select_amount');
     const [baseAmount, setBaseAmount] = useState<number>(TOP_UP_AMOUNTS[0]);
     const [receiptFile, setReceiptFile] = useState<File | null>(null);
+    const [promoCode, setPromoCode] = useState<string>('');
     const { t } = useLanguage();
 
     const uniqueAmount = useMemo(() => {
@@ -52,7 +53,7 @@ export const TopUpPage: React.FC<TopUpPageProps> = ({ user, onTopUpRequest, onBa
     };
 
     const handleConfirmPayment = () => {
-        onTopUpRequest(baseAmount);
+        onTopUpRequest(baseAmount, promoCode.trim() || undefined);
         setStep('pending_confirmation');
     };
 
@@ -87,6 +88,22 @@ export const TopUpPage: React.FC<TopUpPageProps> = ({ user, onTopUpRequest, onBa
                                     </button>
                                 ))}
                             </div>
+
+                            {/* Admin Contact Numbers */}
+                            <div className="p-4 rounded-lg bg-black/10 dark:bg-white/10">
+                                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">Admin bilan bog'lanish (24/7):</p>
+                                <ul className="text-sm space-y-1">
+                                    <li>
+                                        <a href="tel:+998947430912" className="text-cyan-600 dark:text-cyan-400 font-medium">+998 94 743 09 12</a>
+                                    </li>
+                                    <li>
+                                        <a href="tel:+998910574905" className="text-cyan-600 dark:text-cyan-400 font-medium">+998 91 057 49 05</a>
+                                    </li>
+                                    <li>
+                                        <a href="tel:+998937778857" className="text-cyan-600 dark:text-cyan-400 font-medium">+998 93 777 88 57</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </>
                 );
@@ -106,10 +123,22 @@ export const TopUpPage: React.FC<TopUpPageProps> = ({ user, onTopUpRequest, onBa
                             {/* Amount Info */}
                             <div className="p-4 rounded-lg bg-black/10 dark:bg-white/10">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('topUp.instructionAmount')}</span>
+                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('topUp.instructionAmount')}</span>
                                     <CopyButton textToCopy={String(uniqueAmount)} />
                                 </div>
                                 <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400 mt-1">{formatCurrency(uniqueAmount)} UZS</p>
+                            </div>
+
+                            {/* Promo Code */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('topUp.promoCodeLabel')}</label>
+                                <input
+                                    type="text"
+                                    value={promoCode}
+                                    onChange={(e) => setPromoCode(e.target.value)}
+                                    placeholder={t('topUp.promoCodePlaceholder')}
+                                    className="w-full px-3 py-2 rounded-lg border bg-white/70 dark:bg-gray-800/60 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                                />
                             </div>
                              {/* Warnings */}
                             <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-300 text-xs space-y-2">

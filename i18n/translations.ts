@@ -49,6 +49,8 @@ export const translations = {
       instructionAmount: "O'TKAZMA SUMMASI:",
       instructionCopy: "Nusxalash",
       copied: "Nusxalandi!",
+      promoCodeLabel: "Promo-kod",
+      promoCodePlaceholder: "Masalan: START10",
 
       warningTitle: "DIQQAT!!!",
       warning1: "Platforma sizga aytgan summani oxirgi raqamlari bilan birga to'liq o'tkazing!",
@@ -67,7 +69,8 @@ export const translations = {
     // MAIN LAYOUT
     mainLayout: {
       navDashboard: "Mening G'oyalarim",
-      navMarketplace: "Investorlar Markazi",
+      navMarketplace: "Startaperlar Dunyosi",
+      navPartners: "Hamkorlar",
       navLister: "Loyihani Joylash",
       logout: "Chiqish",
       balance: "{0} so'm",
@@ -84,7 +87,7 @@ export const translations = {
 
     // INVESTOR MARKETPLACE
     marketplace: {
-        title: "Investorlar Markazi",
+        title: "Startaperlar Dunyosi",
         subtitle: "O'zbekistonning eng istiqbolli startaplarini kashf eting.",
         searchPlaceholder: "Loyiha nomi bo'yicha qidirish...",
         filterIndustry: "Soha",
@@ -97,6 +100,14 @@ export const translations = {
         fundingSought: "Sarmoya",
         equityOffered: "Taklif (ulush)",
         contact: "Bog'lanish"
+    },
+
+    partners: {
+      title: "Hamkor Tashkilotlar",
+      subtitle: "Biz bilan hamkorlik qilayotgan kompaniyalar",
+      contactPerson: "Mas'ul shaxs",
+      contact: "Kontakt",
+      website: "Veb-sayt"
     },
 
     // LIST PROJECT PAGE
@@ -265,7 +276,8 @@ export const translations = {
     // MAIN LAYOUT
     mainLayout: {
       navDashboard: "Менинг Ғояларим",
-      navMarketplace: "Инвесторлар Маркази",
+      navMarketplace: "Стартаперлар Дунёси",
+      navPartners: "Ҳамкорлар",
       navLister: "Лойиҳани Жойлаш",
       logout: "Чиқиш",
       balance: "{0} сўм",
@@ -282,7 +294,7 @@ export const translations = {
 
     // INVESTOR MARKETPLACE
     marketplace: {
-        title: "Инвесторлар Маркази",
+        title: "Стартаперлар Дунёси",
         subtitle: "Ўзбекистоннинг энг истиқболли стартапларини кашф этинг.",
         searchPlaceholder: "Лойиҳа номи бўйича қидириш...",
         filterIndustry: "Соҳа",
@@ -295,6 +307,14 @@ export const translations = {
         fundingSought: "Сармоя",
         equityOffered: "Таклиф (улуш)",
         contact: "Боғланиш"
+    },
+
+    partners: {
+      title: "Ҳамкор Ташкилотлар",
+      subtitle: "Биз билан ҳамкорлик қилаётган компаниялар",
+      contactPerson: "Мас'ул шахс",
+      contact: "Контакт",
+      website: "Веб-сайт"
     },
 
      // LIST PROJECT PAGE
@@ -444,6 +464,8 @@ export const translations = {
       instructionAmount: "СУММА ПЕРЕВОДА:",
       instructionCopy: "Копировать",
       copied: "Скопировано!",
+      promoCodeLabel: "Промокод",
+      promoCodePlaceholder: "Напр.: START10",
 
       warningTitle: "ВНИМАНИЕ!!!",
       warning1: "Переводите точную сумму, указанную платформой, включая копейки!",
@@ -462,7 +484,8 @@ export const translations = {
     // MAIN LAYOUT
     mainLayout: {
       navDashboard: "Мои Идеи",
-      navMarketplace: "Рынок Инвесторов",
+      navMarketplace: "Мир Стартаперов",
+      navPartners: "Партнеры",
       navLister: "Разместить Проект",
       logout: "Выйти",
       balance: "{0} сум",
@@ -479,7 +502,7 @@ export const translations = {
     
     // INVESTOR MARKETPLACE
     marketplace: {
-        title: "Рынок Инвесторов",
+        title: "Мир Стартаперов",
         subtitle: "Откройте для себя самые перспективные стартапы Узбекистана.",
         searchPlaceholder: "Поиск по названию проекта...",
         filterIndustry: "Сфера",
@@ -492,6 +515,14 @@ export const translations = {
         fundingSought: "Инвестиции",
         equityOffered: "Предложение (доля)",
         contact: "Связаться"
+    },
+
+    partners: {
+      title: "Партнерские Организации",
+      subtitle: "Компании, сотрудничающие с нами",
+      contactPerson: "Контактное лицо",
+      contact: "Контакт",
+      website: "Веб-сайт"
     },
     
     // LIST PROJECT PAGE
@@ -642,6 +673,8 @@ export const translations = {
       instructionAmount: "TRANSFER AMOUNT:",
       instructionCopy: "Copy",
       copied: "Copied!",
+      promoCodeLabel: "Promo code",
+      promoCodePlaceholder: "e.g. START10",
       
       warningTitle: "ATTENTION!!!",
       warning1: "Transfer the exact amount specified by the platform, including the final digits!",
@@ -660,8 +693,9 @@ export const translations = {
     // MAIN LAYOUT
     mainLayout: {
       navDashboard: "My Ideas",
-      navMarketplace: "Investor Marketplace",
-      navLister: "List a Project",
+      navMarketplace: "Startup World",
+      navPartners: "Partners",
+      navLister: "List Project",
       logout: "Logout",
       balance: "{0} UZS",
       topUp: "Top Up",
@@ -674,10 +708,10 @@ export const translations = {
         noProjectsTitle: "You have no ideas yet",
         noProjectsSubtitle: "Click the button above to generate your first startup idea!"
     },
-    
+
     // INVESTOR MARKETPLACE
     marketplace: {
-        title: "Investor Marketplace",
+        title: "Startup World",
         subtitle: "Discover the most promising startups in Uzbekistan.",
         searchPlaceholder: "Search by project name...",
         filterIndustry: "Industry",
@@ -691,8 +725,16 @@ export const translations = {
         equityOffered: "Equity Offered",
         contact: "Contact"
     },
-    
-     // LIST PROJECT PAGE
+
+    partners: {
+      title: "Partner Organizations",
+      subtitle: "Companies partnering with us",
+      contactPerson: "Contact person",
+      contact: "Contact",
+      website: "Website"
+    },
+
+    // LIST PROJECT PAGE
     listProject: {
         title: "List Project for Investment",
         subtitle: "Present your startup to investors and raise capital to get to the next level.",
@@ -712,84 +754,23 @@ export const translations = {
         successMessage: "Project \"{0}\" has been successfully listed on the Investor Marketplace!",
         submitButton: "List Project",
     },
-    
-    // CONFIG STEP
-    configStep: {
-      title: "Idea Parameters",
-      subtitle: "Help the AI create your ideal startup.",
-      insufficientFunds: "Insufficient funds to generate an idea (10,000 UZS). Please top up your balance.",
-      generationError: "An error occurred while generating the idea. Please try again.",
-      industryLabel: "Industry",
-      industryPlaceholder: "Example: E-commerce, AgroTech, FinTech",
-      topicLabel: "Idea topic",
-      topicPlaceholder: "Example: An online marketplace for handmade goods from Uzbekistan",
-      infoLabel: "Brief info",
-      infoPlaceholder: "Example: A platform connecting artisans from Samarkand with global buyers. Focus on authenticity and stories.",
-      investmentLabel: "Initial Investment",
-      investmentPlaceholder: "Example: $1000 - $5000",
-      complexityLabel: "Technical Complexity",
-      complexityLevels: ['Simple MVP', 'Medium Complexity', 'Complex Technology'],
-      businessModelLabel: "Business Model",
-      businessModels: ['B2C (Business-to-Consumer)', 'B2B (Business-to-Business)', 'Subscription', 'Marketplace', 'SaaS (Software as a Service)', 'Freemium', 'Advertising', 'Transaction Fees'],
-      goldenTicketLabel: "Golden Ticket",
-      goldenTicketDesc: "Propose a solution to real problems of major companies in Uzbekistan.",
-      generateButton: "Generate Idea (10,000 UZS)",
-    },
-    
-    // GENERATING STEP
-    generatingStep: {
-        title: "Your idea is being prepared...",
-        steps: [
-            "Analyzing market trends...",
-            "Defining unique value proposition...",
-            "Analyzing competitors...",
-            "Creating customer personas...",
-            "Structuring the 'Lean Canvas'...",
-            "Conducting SWOT and PESTLE analyses...",
-            "Building financial models...",
-            "Creating marketing and sales strategy...",
-            "Drawing up the project roadmap (Gantt)...",
-            "Preparing investor pitch deck...",
-            "Generating legal templates...",
-            "Designing branding kit...",
-            "Compiling final documents..."
-        ]
-    },
-
-    // WORKSPACE
-    workspace: {
-        projectUpdated: "Project updated successfully!",
-        downloadTooltip: "Download business plan (.docx)",
-        shareTooltip: "Share (coming soon)",
-        chatTooltip: "Chat with AI Mentor",
-        // Sidebar
-        nav: {
-            dashboard: "Dashboard",
-            kanban: "Project Hub",
-            legal: "Legal Documents",
-            accelerator: "Accelerator",
-            pitch: "AI Investor Simulator",
-            investorPrep: "Investor Prep",
-            radar: "Market Radar",
-        },
-        // Dashboard Content
-        dashboardContent: {
-            strategicReviewTitle: "AI Strategic Review",
-            strategicReviewDesc: "Get strategic recommendations from the AI to improve your business plan based on market trends and competitor analysis. This process may take up to a minute.",
-            startStrategicReview: "Start Strategic Review",
-            uvpTitle: "Unique Value Proposition (UVP)",
-            personasTitle: "Target Audience Personas",
-            competitorAnalysisTitle: "Competitor Analysis",
-            monetizationTitle: "Monetization Strategy",
-            optimizePrice: "Optimize Pricing",
-            swotTitle: "SWOT Analysis",
-            financialsTitle: "Financial Projections",
-            teamTitle: "Team Structure",
-            roadmapTitle: "Project Roadmap",
-            risksTitle: "Risk Analysis",
-            checklistTitle: "First Steps Checklist",
-            brandingTitle: "Branding Basics"
-        }
-    },
+    // Dashboard Content
+    dashboardContent: {
+        strategicReviewTitle: "AI Strategic Review",
+        strategicReviewDesc: "Get strategic recommendations from the AI to improve your business plan based on market trends and competitor analysis. This process may take up to a minute.",
+        startStrategicReview: "Start Strategic Review",
+        uvpTitle: "Unique Value Proposition (UVP)",
+        personasTitle: "Target Audience Personas",
+        competitorAnalysisTitle: "Competitor Analysis",
+        monetizationTitle: "Monetization Strategy",
+        optimizePrice: "Optimize Pricing",
+        swotTitle: "SWOT Analysis",
+        financialsTitle: "Financial Projections",
+        teamTitle: "Team Structure",
+        roadmapTitle: "Project Roadmap",
+        risksTitle: "Risk Analysis",
+        checklistTitle: "First Steps Checklist",
+        brandingTitle: "Branding Basics"
+    }
   },
 };

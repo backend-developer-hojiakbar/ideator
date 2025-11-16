@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AuthPage } from './components/pages/AuthPage';
 import { MainLayout } from './components/layout/MainLayout';
+import { PartnersPage } from './components/pages/PartnersPage';
 import { ConfigStep } from './components/steps/ConfigStep';
 import { GeneratingStep } from './components/steps/GeneratingStep';
 import { ProjectWorkspacePage } from './components/pages/ProjectWorkspacePage';
@@ -20,7 +21,8 @@ export type Page =
   | 'projectWorkspace'
   | 'topUp'
   | 'investorMarketplace'
-  | 'listProject';
+  | 'listProject'
+  | 'partners';
   
 const AppContent: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -163,10 +165,10 @@ const AppContent: React.FC = () => {
     }
   };
 
-  const handleTopUpRequest = async (amount: number) => {
+  const handleTopUpRequest = async (amount: number, promo_code?: string) => {
       if (!user) return;
       try {
-        await api.topup(amount);
+        await api.topup(amount, promo_code);
         const me = await api.me();
         setUser({
           email: me.phone_number,
@@ -202,6 +204,10 @@ const AppContent: React.FC = () => {
 
   const renderContent = () => {
     if (!user) {
+      // Allow viewing Partners without login
+      if (page === 'partners') {
+        return <PartnersPage />;
+      }
       return <AuthPage onLogin={handleLogin} />;
     }
     
@@ -209,6 +215,7 @@ const AppContent: React.FC = () => {
         case 'dashboard':
         case 'investorMarketplace':
         case 'listProject':
+        case 'partners':
             return <MainLayout 
                         user={user} 
                         onLogout={handleLogout} 

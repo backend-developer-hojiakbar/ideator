@@ -1,4 +1,5 @@
-const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'https://ideatorapi.pythonanywhere.com/api/';
+// Do not end with trailing slash to avoid // when joining paths
+const API_BASE = ((import.meta as any).env?.VITE_API_BASE || 'https://ideatorapi.pythonanywhere.com/api').replace(/\/$/, '');
 
 export type LoginResponse = {
   access: string;
@@ -25,7 +26,9 @@ async function request(path: string, options: RequestInit = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   const token = getAccessToken();
   if (token) headers['Authorization'] = `Bearer ${token}`;
-  const res = await fetch(`${API_BASE}${path}`, { ...options, headers: { ...headers, ...(options.headers || {}) } });
+  // Ensure single slash between base and path
+  const url = `${API_BASE}${path.startsWith('/') ? path : `/${path}`}`;
+  const res = await fetch(url, { ...options, headers: { ...headers, ...(options.headers || {}) } });
   if (!res.ok) {
     let message = 'Request failed';
     try { message = await res.text(); } catch {}
@@ -39,26 +42,28 @@ async function request(path: string, options: RequestInit = {}) {
 
 export const api = {
   // Auth
-  register: (phone_number: string, password: string) =>
-    request('/auth/register/', { method: 'POST', body: JSON.stringify({ phone_number, password }) }),
+  register: (phone_number: string, password: string, full_name?: string, workplace?: string) =>
+    request('auth/register/', { method: 'POST', body: JSON.stringify({ phone_number, password, full_name, workplace }) }),
   login: (phone_number: string, password: string): Promise<LoginResponse> =>
-    request('/auth/login/', { method: 'POST', body: JSON.stringify({ phone_number, password }) }),
-  me: () => request('/auth/me/'),
+    request('auth/login/', { method: 'POST', body: JSON.stringify({ phone_number, password }) }),
+  me: () => request('auth/me/'),
 
   // Notifications
-  getNotifications: () => request('/notifications/'),
-  markNotificationsRead: () => request('/notifications/mark-read/', { method: 'POST' }),
+  getNotifications: () => request('notifications/'),
+  markNotificationsRead: () => request('notifications/mark-read/', { method: 'POST' }),
 
   // Wallet
-  topup: (amount: number) => request('/wallet/topup/', { method: 'POST', body: JSON.stringify({ amount }) }),
+  topup: (amount: number, promo_code?: string) => request('wallet/topup/', { method: 'POST', body: JSON.stringify(promo_code ? { amount, promo_code } : { amount }) }),
 
   // Projects
   startProject: (payload: { project_name: string; description: string; config?: number | null; data: any }) =>
-    request('/projects/start/', { method: 'POST', body: JSON.stringify(payload) }),
-  getProjects: () => request('/projects/'),
+    request('projects/start/', { method: 'POST', body: JSON.stringify(payload) }),
+  getProjects: () => request('projects/'),
 
   // Listings (Investor marketplace)
   createListing: (payload: { project: number; funding_sought: number; equity_offered: number; pitch: string }) =>
-    request('/listings/', { method: 'POST', body: JSON.stringify(payload) }),
-  listListings: (all: boolean = false) => request(`/listings/${all ? '?all=1' : ''}`),
+    request('listings/', { method: 'POST', body: JSON.stringify(payload) }),
+  listListings: (all: boolean = false) => request(`listings/${all ? '?all=1' : ''}`),
+  // Partners
+  listPartners: () => request('partners/'),
 };

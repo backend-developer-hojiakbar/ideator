@@ -11,8 +11,9 @@ interface AuthPageProps {
 
 export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [phone, setPhone] = useState('+998901234567');
-  const [password, setPassword] = useState('12345678');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [workplace, setWorkplace] = useState('');
   const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -29,7 +30,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
           };
           onLogin(mappedUser);
         } else {
-          await api.register(phone, password);
+          await api.register(phone, password, undefined, workplace || undefined);
           const resp = await api.login(phone, password);
           setTokens(resp.access, resp.refresh);
           const mappedUser: User = {
@@ -56,7 +57,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
             </div>
         
             <div className="glass-panel p-8">
-                <div className="mb-6 border-b border-gray-400/30">
+                <div className="mb-6 border-b border-gray-300/30 dark:border-gray-500/30">
                     <nav className="-mb-px flex space-x-6">
                         <button onClick={() => setIsLogin(true)} className={`whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${isLogin ? 'border-cyan-500 text-cyan-600 dark:text-cyan-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}>
                             {t('auth.loginTab')}
@@ -69,7 +70,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('auth.emailLabel')}</label>
+                        <label htmlFor="phone" className="block text-sm font-medium text-gray-800 dark:text-gray-100">{t('auth.emailLabel')}</label>
                         <div className="mt-1">
                             <input
                                 id="phone"
@@ -83,8 +84,24 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
                             />
                         </div>
                     </div>
+                    {!isLogin && (
+                      <div>
+                        <label htmlFor="workplace" className="block text-sm font-medium text-gray-800 dark:text-gray-100">Ish/o'quv joyi (ixtiyoriy)</label>
+                        <div className="mt-1">
+                          <input
+                            id="workplace"
+                            name="workplace"
+                            type="text"
+                            value={workplace}
+                            onChange={(e) => setWorkplace(e.target.value)}
+                            className="w-full p-3 text-sm ios-input"
+                            placeholder="Masalan: TATU / EPAM"
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div>
-                        <label htmlFor="password"  className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('auth.passwordLabel')}</label>
+                        <label htmlFor="password"  className="block text-sm font-medium text-gray-800 dark:text-gray-100">{t('auth.passwordLabel')}</label>
                         <div className="mt-1">
                             <input
                                 id="password"

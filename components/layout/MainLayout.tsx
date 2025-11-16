@@ -10,6 +10,7 @@ import { BuildingStorefrontIcon } from '../icons/BuildingStorefrontIcon';
 import { DocumentTextIcon } from '../icons/DocumentTextIcon';
 import { DashboardPage } from '../pages/DashboardPage';
 import { InvestorMarketplacePage } from '../pages/InvestorMarketplacePage';
+import { PartnersPage } from '../pages/PartnersPage';
 import { ListProjectPage } from '../pages/ListProjectPage';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSwitcher } from '../LanguageSwitcher';
@@ -99,6 +100,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ user, onLogout, onNaviga
         { id: 'dashboard', label: t('mainLayout.navDashboard'), icon: SparklesIcon },
         { id: 'listProject', label: t('mainLayout.navLister'), icon: DocumentTextIcon },
         { id: 'investorMarketplace', label: t('mainLayout.navMarketplace'), icon: BuildingStorefrontIcon },
+        { id: 'partners', label: t('mainLayout.navPartners'), icon: BuildingStorefrontIcon },
     ];
 
     const handleNavigateToProject = (project: StartupIdea) => {
@@ -106,6 +108,12 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ user, onLogout, onNaviga
     };
 
     const handleStartNewProject = () => {
+        // Prevent starting without sufficient funds (10,000)
+        if (user.balance < 10000) {
+            alert(t('configStep.insufficientFunds'));
+            onNavigate('topUp');
+            return;
+        }
         onNavigate('newProjectConfig');
     };
     
@@ -115,6 +123,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ user, onLogout, onNaviga
                 return <DashboardPage projects={projects} onNavigateToProject={handleNavigateToProject} onStartNewProject={handleStartNewProject} />;
             case 'investorMarketplace':
                 return <InvestorMarketplacePage />;
+            case 'partners':
+                return <PartnersPage />;
             case 'listProject':
                 return <ListProjectPage projects={projects} user={user} />;
             default:
@@ -172,6 +182,16 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ user, onLogout, onNaviga
                     </div>
                 </div>
             </header>
+
+            {/* Low balance banner */}
+            {user.balance < 10000 && (
+                <div className="mx-4 -mt-2 mb-2">
+                    <div className="rounded-lg p-3 sm:p-4 bg-yellow-500/10 border border-yellow-500/30 text-yellow-800 dark:text-yellow-200 flex items-center justify-between gap-2">
+                        <p className="text-xs sm:text-sm">{t('configStep.insufficientFunds')}</p>
+                        <button onClick={() => onNavigate('topUp')} className="text-xs px-3 py-1 rounded-md bg-yellow-500 text-white hover:bg-yellow-600">{t('mainLayout.topUp')}</button>
+                    </div>
+                </div>
+            )}
 
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto">
