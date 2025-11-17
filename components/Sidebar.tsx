@@ -1,10 +1,7 @@
 import React from 'react';
 import { BrainCircuitIcon } from './icons/BrainCircuitIcon';
-import { DocumentTextIcon } from './icons/DocumentTextIcon';
 import { MicrophoneIcon } from './icons/MicrophoneIcon';
 import { SparklesIcon } from './icons/SparklesIcon';
-import { ChartBarIcon } from './icons/ChartBarIcon';
-import { ShieldCheckIcon } from './icons/ShieldCheckIcon';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface ResultNavProps {
@@ -32,14 +29,10 @@ export const Sidebar: React.FC<ResultNavProps> = ({ activeView, onViewChange }) 
   const mainItems = [
     { id: 'dashboard', label: t('workspace.nav.dashboard'), icon: BrainCircuitIcon },
     { id: 'kanban', label: t('workspace.nav.kanban'), icon: SparklesIcon },
-    { id: 'legal', label: t('workspace.nav.legal'), icon: DocumentTextIcon },
+    { id: 'pitch', label: t('workspace.nav.pitch'), icon: MicrophoneIcon },
   ];
 
-  const acceleratorTools = [
-      { id: 'pitch', label: t('workspace.nav.pitch'), icon: MicrophoneIcon },
-      { id: 'investorPrep', label: t('workspace.nav.investorPrep'), icon: ShieldCheckIcon },
-      { id: 'radar', label: t('workspace.nav.radar'), icon: ChartBarIcon },
-  ];
+  const acceleratorTools: any[] = [];
 
   return (
     <div className="w-full">
@@ -47,11 +40,7 @@ export const Sidebar: React.FC<ResultNavProps> = ({ activeView, onViewChange }) 
             {mainItems.map(item => (
                 <NavButton key={item.id} item={item} active={activeView === item.id} onClick={() => onViewChange(item.id)} />
             ))}
-            <div className="h-6 w-px bg-gray-500/30 mx-1 sm:mx-2"></div>
-             <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider pr-2 hidden lg:inline">{t('workspace.nav.accelerator')}</span>
-            {acceleratorTools.map(item => (
-                <NavButton key={item.id} item={item} active={activeView === item.id} onClick={() => onViewChange(item.id)} />
-            ))}
+            
         </nav>
     </div>
   );

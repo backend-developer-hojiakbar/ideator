@@ -14,6 +14,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [workplace, setWorkplace] = useState('');
+  const [referralCode, setReferralCode] = useState('');
   const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -30,7 +31,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
           };
           onLogin(mappedUser);
         } else {
-          await api.register(phone, password, undefined, workplace || undefined);
+          await api.register(phone, password, undefined, workplace || undefined, referralCode || undefined);
           const resp = await api.login(phone, password);
           setTokens(resp.access, resp.refresh);
           const mappedUser: User = {
@@ -96,6 +97,22 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
                             onChange={(e) => setWorkplace(e.target.value)}
                             className="w-full p-3 text-sm ios-input"
                             placeholder="Masalan: TATU / EPAM"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {!isLogin && (
+                      <div>
+                        <label htmlFor="referral_code" className="block text-sm font-medium text-gray-800 dark:text-gray-100">Referral kod (ixtiyoriy)</label>
+                        <div className="mt-1">
+                          <input
+                            id="referral_code"
+                            name="referral_code"
+                            type="text"
+                            value={referralCode}
+                            onChange={(e) => setReferralCode(e.target.value)}
+                            className="w-full p-3 text-sm ios-input"
+                            placeholder="Masalan: 8 BELGI (ABCDEFG1)"
                           />
                         </div>
                       </div>

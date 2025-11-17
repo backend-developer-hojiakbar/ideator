@@ -110,87 +110,95 @@ export const ListProjectPage: React.FC<ListProjectPageProps> = ({ projects, user
     };
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
-            <div className="text-center mb-8">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-100">{t('listProject.title')}</h1>
-                <p className="mt-1 text-gray-400 max-w-2xl mx-auto">{t('listProject.subtitle')}</p>
-            </div>
-            
-            <div className="flex flex-col lg:flex-row gap-8">
-                {/* Form Section */}
-                <div className="lg:w-2/3">
-                    <div className="glass-panel p-8 h-full">
-                        <h2 className="text-xl font-bold mb-6 text-gray-100">{t('listProject.formTitle')}</h2>
-                        {projects.length === 0 ? (
-                             <div className="text-center py-10">
-                                <h2 className="text-xl font-semibold text-gray-200">{t('listProject.noProjects')}</h2>
-                                <p className="mt-2 text-gray-400">{t('listProject.noProjectsDesc')}</p>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div>
-                                    <label htmlFor="project-select" className="block text-sm font-medium text-gray-300">{t('listProject.selectProject')}</label>
-                                    <select
-                                        id="project-select"
-                                        value={selectedProjectId}
-                                        onChange={(e) => setSelectedProjectId(e.target.value)}
-                                        className="mt-1 block w-full ios-input p-3"
-                                    >
-                                        <option value="" disabled>{t('listProject.selectProjectPlaceholder')}</option>
-                                        {projects.map(p => <option key={p.id} value={p.id}>{p.projectName}</option>)}
-                                    </select>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label htmlFor="funding" className="block text-sm font-medium text-gray-300">{t('listProject.fundingLabel')}</label>
-                                        <input type="number" id="funding" value={fundingSought} onChange={e => setFundingSought(e.target.value)} className="mt-1 w-full ios-input p-3" />
-                                    </div>
-                                     <div>
-                                        <label htmlFor="equity" className="block text-sm font-medium text-gray-300">{t('listProject.equityLabel')}</label>
-                                        <input type="number" id="equity" min="0" max="100" value={equityOffered} onChange={e => setEquityOffered(e.target.value)} className="mt-1 w-full ios-input p-3" />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="pitch" className="block text-sm font-medium text-gray-300">{t('listProject.pitchLabel')}</label>
-                                     <textarea id="pitch" value={pitch} onChange={e => setPitch(e.target.value)} rows={6} className="mt-1 w-full ios-input p-3" placeholder={t('listProject.pitchPlaceholder')}></textarea>
-                                </div>
-                                
-                                {error && <p className="text-sm text-red-400">{error}</p>}
-                                {success && <p className="text-sm text-green-400">{success}</p>}
-
-                                <div>
-                                     <button
-                                        type="submit"
-                                        disabled={!selectedProjectId}
-                                        className="w-full flex justify-center py-3 px-4 liquid-button disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {t('listProject.submitButton')}
-                                    </button>
-                                </div>
-                            </form>
-                        )}
-                    </div>
+        <div className="h-full flex flex-col">
+            {/* Header (fixed height) */}
+            <div className="flex-shrink-0 p-3 sm:p-4">
+                <div className="text-center">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-100">{t('listProject.title')}</h1>
+                    <p className="mt-1 text-gray-400 max-w-2xl mx-auto">{t('listProject.subtitle')}</p>
                 </div>
+            </div>
 
-                {/* Preview Section */}
-                 <div className="lg:w-1/3">
-                     <div className="sticky top-24">
-                        <h2 className="text-xl font-bold mb-6 text-center text-gray-100">{t('listProject.previewTitle')}</h2>
-                        <ProjectPreviewCard 
-                            project={{
-                                fundingSought: Number(fundingSought),
-                                equityOffered: Number(equityOffered),
-                                pitch,
-                                projectName: selectedIdea?.projectName || t('listProject.previewTitle'),
-                                projectId: selectedIdea?.id || '',
-                                description: selectedIdea?.description || '',
-                                founderEmail: user.email,
-                            }}
-                            selectedIdea={selectedIdea}
-                            lang={lang}
-                        />
+            {/* Body (fills available height, no page scroll) */}
+            <div className="flex-1 overflow-hidden px-3 sm:px-4 lg:px-6">
+                <div className="h-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-6">
+                    {/* Form Section */}
+                    <div className="lg:w-2/3 h-full overflow-hidden">
+                        <div className="glass-panel p-4 sm:p-6 h-full flex flex-col">
+                            <h2 className="text-lg sm:text-xl font-bold mb-3 text-gray-100 flex-shrink-0">{t('listProject.formTitle')}</h2>
+                            {projects.length === 0 ? (
+                                <div className="text-center py-6 sm:py-10 overflow-auto">
+                                    <h2 className="text-lg sm:text-xl font-semibold text-gray-200">{t('listProject.noProjects')}</h2>
+                                    <p className="mt-2 text-gray-400">{t('listProject.noProjectsDesc')}</p>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 flex-1 overflow-y-auto pr-1">
+                                    <div>
+                                        <label htmlFor="project-select" className="block text-sm font-medium text-gray-300">{t('listProject.selectProject')}</label>
+                                        <select
+                                            id="project-select"
+                                            value={selectedProjectId}
+                                            onChange={(e) => setSelectedProjectId(e.target.value)}
+                                            className="mt-1 block w-full ios-input p-3"
+                                        >
+                                            <option value="" disabled>{t('listProject.selectProjectPlaceholder')}</option>
+                                            {projects.map(p => <option key={p.id} value={p.id}>{p.projectName}</option>)}
+                                        </select>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                                        <div>
+                                            <label htmlFor="funding" className="block text-sm font-medium text-gray-300">{t('listProject.fundingLabel')}</label>
+                                            <input type="number" id="funding" value={fundingSought} onChange={e => setFundingSought(e.target.value)} className="mt-1 w-full ios-input p-3" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="equity" className="block text-sm font-medium text-gray-300">{t('listProject.equityLabel')}</label>
+                                            <input type="number" id="equity" min="0" max="100" value={equityOffered} onChange={e => setEquityOffered(e.target.value)} className="mt-1 w-full ios-input p-3" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="pitch" className="block text-sm font-medium text-gray-300">{t('listProject.pitchLabel')}</label>
+                                        <textarea id="pitch" value={pitch} onChange={e => setPitch(e.target.value)} rows={6} className="mt-1 w-full ios-input p-3" placeholder={t('listProject.pitchPlaceholder')}></textarea>
+                                    </div>
+
+                                    {error && <p className="text-sm text-red-400">{error}</p>}
+                                    {success && <p className="text-sm text-green-400">{success}</p>}
+
+                                    <div className="pb-2">
+                                        <button
+                                            type="submit"
+                                            disabled={!selectedProjectId}
+                                            className="w-full flex justify-center py-3 px-4 liquid-button disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {t('listProject.submitButton')}
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Preview Section */}
+                    <div className="lg:w-1/3 h-full overflow-hidden">
+                        <div className="h-full glass-panel p-4 sm:p-6 flex flex-col overflow-hidden">
+                            <h2 className="text-lg sm:text-xl font-bold mb-3 text-center text-gray-100 flex-shrink-0">{t('listProject.previewTitle')}</h2>
+                            <div className="flex-1 overflow-y-auto pr-1">
+                                <ProjectPreviewCard 
+                                    project={{
+                                        fundingSought: Number(fundingSought),
+                                        equityOffered: Number(equityOffered),
+                                        pitch,
+                                        projectName: selectedIdea?.projectName || t('listProject.previewTitle'),
+                                        projectId: selectedIdea?.id || '',
+                                        description: selectedIdea?.description || '',
+                                        founderEmail: user.email,
+                                    }}
+                                    selectedIdea={selectedIdea}
+                                    lang={lang}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,16 +1,9 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import type { StartupIdea, PitchDeckSlide, PitchDeckSlideSuggestion, AISlideAnalysis, AIPitchHealthCheck } from '../types';
-import { getAiSlideAnalysis, getAiPitchHealthCheck, rewritePitchDeckSlide } from '../services/geminiService';
+import React, { useState, useMemo } from 'react';
+import type { StartupIdea, PitchDeckSlide, PitchDeckSlideSuggestion } from '../types';
+import { rewritePitchDeckSlide } from '../services/geminiService';
 import { LoadingSpinner } from './icons/LoadingSpinner';
 import { MagicWandIcon } from './icons/MagicWandIcon';
-import { CheckIcon } from './icons/CheckIcon';
 import { LightbulbIcon } from './icons/LightbulbIcon';
-import { QuestionMarkIcon } from './icons/QuestionMarkIcon';
-import { ThumbsUpIcon } from './icons/ThumbsUpIcon';
-import { TargetIcon } from './icons/TargetIcon';
-import { ChartBarIcon } from './icons/ChartBarIcon';
-import { BrainCircuitIcon } from './icons/BrainCircuitIcon';
-import { RefreshIcon } from './icons/RefreshIcon';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const RewriteSuggestionModal: React.FC<{
@@ -66,15 +59,7 @@ const RewriteSuggestionModal: React.FC<{
     );
 };
 
-const AnalysisSection: React.FC<{ icon: React.FC<any>, title: string, children: React.ReactNode }> = ({ icon: Icon, title, children }) => (
-    <div>
-        <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
-            <Icon className="w-5 h-5 text-cyan-500" />
-            <span>{title}</span>
-        </h4>
-        <div className="text-sm text-gray-600 dark:text-gray-400 pl-7 space-y-1">{children}</div>
-    </div>
-);
+ 
 
 
 interface InvestorPitchRoomProps {
@@ -82,20 +67,9 @@ interface InvestorPitchRoomProps {
   onUpdateProject: (updatedIdea: StartupIdea) => void;
 }
 
-type InvestorPersona = "Shavqatsiz Analitik" | "Mahsulotga Oshiq Visioner" | "O‘sishga Qaram Marketolog";
-type ActiveTab = 'slide' | 'health';
-
 export const InvestorPitchRoom: React.FC<InvestorPitchRoomProps> = ({ idea, onUpdateProject }) => {
     const [pitchDeck, setPitchDeck] = useState(idea.pitchDeck);
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-    const [persona, setPersona] = useState<InvestorPersona>("Shavqatsiz Analitik");
-    const [activeTab, setActiveTab] = useState<ActiveTab>('slide');
-
-    const [slideAnalysis, setSlideAnalysis] = useState<AISlideAnalysis | null>(null);
-    const [isLoadingAnalysis, setIsLoadingAnalysis] = useState(false);
-
-    const [healthCheck, setHealthCheck] = useState<AIPitchHealthCheck | null>(null);
-    const [isLoadingHealthCheck, setIsLoadingHealthCheck] = useState(false);
 
     const [isRewriting, setIsRewriting] = useState(false);
     const [suggestion, setSuggestion] = useState<PitchDeckSlideSuggestion | null>(null);
@@ -106,55 +80,7 @@ export const InvestorPitchRoom: React.FC<InvestorPitchRoomProps> = ({ idea, onUp
         uniqueValueProposition: idea.leanCanvas.uniqueValueProposition,
     }), [idea.projectName, idea.leanCanvas.uniqueValueProposition]);
 
-    const handleFetchSlideAnalysis = useCallback(async () => {
-        setIsLoadingAnalysis(true);
-        setSlideAnalysis(null);
-        try {
-            const currentSlide = pitchDeck[currentSlideIndex];
-            const slideContent = `${currentSlide.title}: ${currentSlide.content.join('; ')}`;
-            // FIX: Pass the 'lang' argument to the function call.
-            const response = await getAiSlideAnalysis(persona, slideContent, ideaContext, lang);
-            setSlideAnalysis(response);
-            
-            // Persist the generated question
-            if (response.investorQuestion) {
-                 const newPitchDeck = [...pitchDeck];
-                 newPitchDeck[currentSlideIndex].investorQuestion = response.investorQuestion;
-                 onUpdateProject({ ...idea, pitchDeck: newPitchDeck });
-                 setPitchDeck(newPitchDeck);
-            }
-
-        } catch (error) {
-            console.error("AI Slide Analysis Error:", error);
-        } finally {
-            setIsLoadingAnalysis(false);
-        }
-    }, [currentSlideIndex, persona, pitchDeck, ideaContext, lang, idea, onUpdateProject]);
     
-    useEffect(() => {
-        handleFetchSlideAnalysis();
-    }, [handleFetchSlideAnalysis]);
-    
-    const handleFetchHealthCheck = useCallback(async () => {
-        setIsLoadingHealthCheck(true);
-        setHealthCheck(null);
-        try {
-            const fullDeckContent = pitchDeck.map(s => `Sarlavha: ${s.title}\nMazmuni: ${s.content.join(', ')}`).join('\n---\n');
-            // FIX: Pass the 'lang' argument to the function call.
-            const response = await getAiPitchHealthCheck(fullDeckContent, ideaContext, lang);
-            setHealthCheck(response);
-        } catch (error) {
-            console.error("AI Health Check Error:", error);
-        } finally {
-            setIsLoadingHealthCheck(false);
-        }
-    }, [pitchDeck, ideaContext, lang]);
-
-    useEffect(() => {
-        if (activeTab === 'health' && !healthCheck && !isLoadingHealthCheck) {
-            handleFetchHealthCheck();
-        }
-    }, [activeTab, healthCheck, isLoadingHealthCheck, handleFetchHealthCheck]);
 
     const handleRewrite = async () => {
         setIsRewriting(true);
@@ -231,67 +157,7 @@ export const InvestorPitchRoom: React.FC<InvestorPitchRoomProps> = ({ idea, onUp
                 </div>
             </div>
 
-            {/* Right Panel: AI Analysis - order-3 on mobile */}
-            <div className="w-full md:w-1/4 flex-shrink-0 bg-white dark:bg-gray-800 rounded-lg flex flex-col overflow-hidden md:order-3">
-                <div className="p-3 border-b dark:border-gray-700 flex-shrink-0">
-                    <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1">
-                        <button onClick={() => setActiveTab('slide')} className={`w-1/2 py-1 text-sm font-medium rounded ${activeTab === 'slide' ? 'bg-white dark:bg-gray-800 shadow' : ''}`}>Slayd Tahlili</button>
-                        <button onClick={() => setActiveTab('health')} className={`w-1/2 py-1 text-sm font-medium rounded ${activeTab === 'health' ? 'bg-white dark:bg-gray-800 shadow' : ''}`}>Umumiy Tahlil</button>
-                    </div>
-                </div>
-
-                <div className="flex-1 p-4 overflow-y-auto space-y-4">
-                    {activeTab === 'slide' ? (
-                        <>
-                            <select value={persona} onChange={(e) => setPersona(e.target.value as InvestorPersona)} className="w-full p-2 text-sm bg-gray-50 border dark:bg-gray-700 dark:border-gray-600 rounded-md">
-                                <option>Shavqatsiz Analitik</option>
-                                <option>Mahsulotga Oshiq Visioner</option>
-                                <option>O‘sishga Qaram Marketolog</option>
-                            </select>
-                            {isLoadingAnalysis ? <div className="flex justify-center pt-10"><LoadingSpinner/></div> : slideAnalysis ? (
-                                <div className="space-y-5">
-                                    <AnalysisSection icon={TargetIcon} title="Asosiy Xabar"><p className="italic">"{slideAnalysis.keyMessage}"</p></AnalysisSection>
-                                    <AnalysisSection icon={ThumbsUpIcon} title="Kuchli Tomonlari"><ul className="list-disc list-inside">{slideAnalysis.strengths.map((s, i) => <li key={i}>{s}</li>)}</ul></AnalysisSection>
-                                    <AnalysisSection icon={LightbulbIcon} title="Yaxshilash Uchun"><ul className="list-disc list-inside">{slideAnalysis.improvements.map((s, i) => <li key={i}>{s}</li>)}</ul></AnalysisSection>
-                                    <AnalysisSection icon={ChartBarIcon} title="Vizual Tavsiya"><p>{slideAnalysis.visualSuggestion}</p></AnalysisSection>
-                                    <AnalysisSection icon={QuestionMarkIcon} title="Investor Savoli"><p className="font-semibold italic">"{slideAnalysis.investorQuestion}"</p></AnalysisSection>
-                                </div>
-                            ) : <p>Tahlil yuklanmadi.</p>}
-                        </>
-                    ) : (
-                        <>
-                           <div className="flex justify-center items-center gap-2">
-                                <h3 className="font-bold text-center text-gray-800 dark:text-gray-200">Taqdimot Salomatligi</h3>
-                                {!isLoadingHealthCheck && healthCheck && (
-                                    <button onClick={handleFetchHealthCheck} title="Tahlilni yangilash" className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
-                                        <RefreshIcon className="w-4 h-4 text-gray-500" />
-                                    </button>
-                                )}
-                            </div>
-                           {isLoadingHealthCheck || !healthCheck ? (
-                               <div className="flex flex-col items-center justify-center pt-10 text-center">
-                                   <LoadingSpinner/>
-                                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">Taqdimot salomatligi tahlil qilinmoqda...</p>
-                               </div>
-                           ) : (
-                               <div className="space-y-4">
-                                   <div>
-                                      <div className="flex justify-between mb-1"><span className="text-base font-medium">Tayyorgarlik Reytingi</span><span className="text-sm font-medium">{healthCheck.readinessScore}/100</span></div>
-                                      <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"><div className="bg-green-500 h-2.5 rounded-full" style={{width: `${healthCheck.readinessScore}%`}}></div></div>
-                                   </div>
-                                   <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
-                                       <h4 className="font-semibold text-sm mb-1">AI Xulosasi</h4>
-                                       <p className="text-sm italic">"{healthCheck.summary}"</p>
-                                   </div>
-                                    <div><h4 className="font-semibold text-sm">Eng Kuchli Slaydlar:</h4><ul className="list-disc list-inside text-sm">{healthCheck.strongestSlides.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
-                                    <div><h4 className="font-semibold text-sm">E'tibor Talab Slaydlar:</h4><ul className="list-disc list-inside text-sm">{healthCheck.weakestSlides.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
-                                    <div><h4 className="font-semibold text-sm">Strategik Tavsiyalar:</h4><ul className="list-disc list-inside text-sm">{healthCheck.strategicRecommendations.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
-                               </div>
-                           )}
-                        </>
-                    )}
-                </div>
-            </div>
+            {/* Right Panel removed as requested */}
 
         </div>
     </div>

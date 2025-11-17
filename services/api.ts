@@ -1,5 +1,5 @@
 // Do not end with trailing slash to avoid // when joining paths
-const API_BASE = ((import.meta as any).env?.VITE_API_BASE || 'https://ideatorapi.pythonanywhere.com/api').replace(/\/$/, '');
+const API_BASE = ((import.meta as any).env?.VITE_API_BASE || 'http://127.0.0.1:8000/api').replace(/\/$/, '');
 
 export type LoginResponse = {
   access: string;
@@ -42,11 +42,13 @@ async function request(path: string, options: RequestInit = {}) {
 
 export const api = {
   // Auth
-  register: (phone_number: string, password: string, full_name?: string, workplace?: string) =>
-    request('auth/register/', { method: 'POST', body: JSON.stringify({ phone_number, password, full_name, workplace }) }),
+  register: (phone_number: string, password: string, full_name?: string, workplace?: string, referral_code?: string) =>
+    request('auth/register/', { method: 'POST', body: JSON.stringify({ phone_number, password, full_name, workplace, referral_code }) }),
   login: (phone_number: string, password: string): Promise<LoginResponse> =>
     request('auth/login/', { method: 'POST', body: JSON.stringify({ phone_number, password }) }),
   me: () => request('auth/me/'),
+  changePassword: (old_password: string, new_password: string) =>
+    request('auth/change-password/', { method: 'POST', body: JSON.stringify({ old_password, new_password }) }),
 
   // Notifications
   getNotifications: () => request('notifications/'),
@@ -66,4 +68,8 @@ export const api = {
   listListings: (all: boolean = false) => request(`listings/${all ? '?all=1' : ''}`),
   // Partners
   listPartners: () => request('partners/'),
+  // Announcements (Tanlovlar eloni)
+  listAnnouncements: () => request('announcements/'),
+  // Referral
+  generateReferral: () => request('auth/generate-referral/', { method: 'POST' }),
 };

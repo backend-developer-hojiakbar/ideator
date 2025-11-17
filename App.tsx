@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import './styles/typography.css';
+import './styles/responsive.css';
+import './styles/overrides.css';
 import { AuthPage } from './components/pages/AuthPage';
 import { MainLayout } from './components/layout/MainLayout';
 import { PartnersPage } from './components/pages/PartnersPage';
+import { AnnouncementsPage } from './components/pages/AnnouncementsPage';
 import { ConfigStep } from './components/steps/ConfigStep';
 import { GeneratingStep } from './components/steps/GeneratingStep';
 import { ProjectWorkspacePage } from './components/pages/ProjectWorkspacePage';
@@ -22,11 +26,14 @@ export type Page =
   | 'topUp'
   | 'investorMarketplace'
   | 'listProject'
-  | 'partners';
+  | 'partners'
+  | 'announcements'
+  | 'account';
   
 const AppContent: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [page, setPage] = useState<Page>('auth');
+  const [bootstrapping, setBootstrapping] = useState(true);
   const [projects, setProjects] = useState<StartupIdea[]>([]);
   const [activeProject, setActiveProject] = useState<StartupIdea | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -36,13 +43,17 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     const bootstrap = async () => {
       const token = getAccessToken();
-      if (!token) return;
+      if (!token) {
+        setBootstrapping(false);
+        return;
+      }
       try {
         const me = await api.me();
         const mappedUser: User = {
           email: me.phone_number,
           isSubscribed: !!me.is_subscribed,
           balance: typeof me.balance === 'string' ? parseFloat(me.balance) : me.balance,
+          isInvestor: !!me.is_investor,
         };
         setUser(mappedUser);
         const proj = await api.getProjects();
@@ -61,6 +72,8 @@ const AppContent: React.FC = () => {
         setPage('dashboard');
       } catch (e) {
         console.error(e);
+      } finally {
+        setBootstrapping(false);
       }
     };
     bootstrap();
@@ -89,6 +102,7 @@ const AppContent: React.FC = () => {
         email: me.phone_number,
         isSubscribed: !!me.is_subscribed,
         balance: typeof me.balance === 'string' ? parseFloat(me.balance) : me.balance,
+        isInvestor: !!me.is_investor,
       };
       setUser(mappedUser);
       const proj = await api.getProjects();
@@ -203,10 +217,21 @@ const AppContent: React.FC = () => {
   };
 
   const renderContent = () => {
+    if (bootstrapping) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="glass-panel p-6">Loading...</div>
+        </div>
+      );
+    }
     if (!user) {
       // Allow viewing Partners without login
       if (page === 'partners') {
         return <PartnersPage />;
+      }
+      // Allow viewing Announcements without login
+      if (page === 'announcements') {
+        return <AnnouncementsPage />;
       }
       return <AuthPage onLogin={handleLogin} />;
     }
@@ -216,6 +241,8 @@ const AppContent: React.FC = () => {
         case 'investorMarketplace':
         case 'listProject':
         case 'partners':
+        case 'announcements':
+        case 'account':
             return <MainLayout 
                         user={user} 
                         onLogout={handleLogout} 

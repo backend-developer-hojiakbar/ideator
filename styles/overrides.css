@@ -1,0 +1,90 @@
+/* Force all gray text utilities to render as white */
+.text-gray-50, .text-gray-100, .text-gray-200, .text-gray-300,
+.text-gray-400, .text-gray-500, .text-gray-600, .text-gray-700,
+.text-gray-800, .text-gray-900 {
+  color: #ffffff !important;
+}
+
+.dark\:text-gray-50, .dark\:text-gray-100, .dark\:text-gray-200, .dark\:text-gray-300,
+.dark\:text-gray-400, .dark\:text-gray-500, .dark\:text-gray-600, .dark\:text-gray-700,
+.dark\:text-gray-800, .dark\:text-gray-900 {
+  color: #ffffff !important;
+}
+
+/* Make explicitly white text bold */
+.text-white { font-weight: 700 !important; }
+.dark\:text-white { font-weight: 700 !important; }
+
+/* Global scale down by ~5% */
+body { zoom: 0.95; }
+
+/* Glassy cards and panels: transparent with strong blur */
+.glass-panel,
+.card,
+.panel,
+.modal,
+.dropdown,
+.menu {
+  background-color: rgba(255, 255, 255, 0.08) !important; /* light glass */
+  backdrop-filter: blur(24px) saturate(130%) !important; /* tuned blur */
+  -webkit-backdrop-filter: blur(24px) saturate(130%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Specifically make glass-panel background fully transparent */
+.glass-panel {
+  background-color: transparent !important;
+}
+
+/* Force Tailwind white/gray card backgrounds to be glassy too */
+.bg-white,
+.dark\:bg-white,
+.bg-gray-50, .bg-gray-100, .bg-gray-200,
+.dark\:bg-gray-50, .dark\:bg-gray-100, .dark\:bg-gray-200 {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(18px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Inputs to feel glassy as well without hurting readability */
+.ios-input,
+input, textarea, select {
+  background-color: rgba(255, 255, 255, 0.12) !important; /* a bit more opaque for readability */
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(24px) saturate(120%) !important; /* tuned input blur */
+  -webkit-backdrop-filter: blur(24px) saturate(120%) !important;
+}
+
+/* Native select dropdown menu and options */
+select,
+select:focus {
+  background-color: rgba(20, 20, 20, 0.45) !important; /* darker glass for contrast */
+  color: #ffffff !important;
+}
+select option {
+  background-color: rgba(20, 20, 20, 0.85) !important; /* solid enough to read */
+  color: #ffffff !important;
+}
+select option:checked,
+select option:hover {
+  background-color: rgba(0, 159, 170, 0.6) !important; /* cyan-ish highlight */
+  color: #ffffff !important;
+}
+
+/* Placeholder text should also be readable */
+::placeholder { color: rgba(255,255,255,0.8) !important; }
+::-ms-input-placeholder { color: rgba(255,255,255,0.8) !important; }
+:-ms-input-placeholder { color: rgba(255,255,255,0.8) !important; }
+
+/* Focus ring for inputs */
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(0, 200, 220, 0.6) !important;
+  border-color: rgba(0, 200, 220, 0.6) !important;
+}
+
+/* Fine-tune divider transparency */
+.border-white\/10 { border-color: rgba(255,255,255,0.18) !important; }

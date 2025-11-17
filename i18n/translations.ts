@@ -69,9 +69,11 @@ export const translations = {
     // MAIN LAYOUT
     mainLayout: {
       navDashboard: "Mening G'oyalarim",
-      navMarketplace: "Startaperlar Dunyosi",
+      navMarketplace: "G'oyalar dunyosi",
+      navAnnouncements: "Tanlovlar eloni",
       navPartners: "Hamkorlar",
       navLister: "Loyihani Joylash",
+      navAccount: "Hisob",
       logout: "Chiqish",
       balance: "{0} so'm",
       topUp: "Hisobni to'ldirish",
@@ -87,7 +89,7 @@ export const translations = {
 
     // INVESTOR MARKETPLACE
     marketplace: {
-        title: "Startaperlar Dunyosi",
+        title: "G'oyalar dunyosi",
         subtitle: "O'zbekistonning eng istiqbolli startaplarini kashf eting.",
         searchPlaceholder: "Loyiha nomi bo'yicha qidirish...",
         filterIndustry: "Soha",
@@ -108,6 +110,18 @@ export const translations = {
       contactPerson: "Mas'ul shaxs",
       contact: "Kontakt",
       website: "Veb-sayt"
+    },
+
+    announcements: {
+      title: "Tanlovlar eloni",
+      subtitle: "Aktual tanlovlar, grantlar va aksiyalar haqida ma'lumotlar",
+      errorLoading: "E'lonlarni yuklashda xatolik yuz berdi.",
+      emptyTitle: "Hozircha e'lonlar yo'q",
+      emptySubtitle: "Yaqin orada yangi tanlovlar bu yerda chiqadi.",
+      deadline: "Muddat",
+      viewRules: "Nizomni ko'rish",
+      applyNow: "Ariza topshirish",
+      publishedAt: "E'lon qilingan: {0}",
     },
 
     // LIST PROJECT PAGE
@@ -144,7 +158,7 @@ export const translations = {
       infoLabel: "Qisqacha ma'lumot",
       infoPlaceholder: "Namuna: Samarqandlik hunarmandlarni global xaridorlar bilan bog'laydigan platforma. Asosiy e'tibor - haqiqiylik va hikoyalar.",
       investmentLabel: "Boshlang'ich Sarmoya",
-      investmentPlaceholder: "Namuna: $1000 - $5000",
+      investmentPlaceholder: "Namuna: 10 000 000 so'm",
       complexityLabel: "Texnik Murakkablik",
       complexityLevels: ['Oson MVP', 'O\'rta murakkablik', 'Murakkab texnologiya'],
       businessModelLabel: "Biznes Model",
@@ -277,8 +291,10 @@ export const translations = {
     mainLayout: {
       navDashboard: "Менинг Ғояларим",
       navMarketplace: "Стартаперлар Дунёси",
+      navAnnouncements: "Танловлар эълони",
       navPartners: "Ҳамкорлар",
       navLister: "Лойиҳани Жойлаш",
+      navAccount: "Ҳисоб",
       logout: "Чиқиш",
       balance: "{0} сўм",
       topUp: "Ҳисобни тўлдириш",
@@ -317,6 +333,18 @@ export const translations = {
       website: "Веб-сайт"
     },
 
+    announcements: {
+      title: "Танловлар эълони",
+      subtitle: "Актуал танловлар, грантлар ва акциялар ҳақида маълумотлар",
+      errorLoading: "Эълонларни юклашда хатолик юз берди.",
+      emptyTitle: "Ҳозирча эълонлар йўқ",
+      emptySubtitle: "Яқин орада янги танловлар шу ерда чиқади.",
+      deadline: "Муддат",
+      viewRules: "Низомни кўриш",
+      applyNow: "Ариза топшириш",
+      publishedAt: "Эълон қилинган: {0}",
+    },
+
      // LIST PROJECT PAGE
     listProject: {
         title: "Лойиҳани Инвестицияга Чиқариш",
@@ -351,7 +379,7 @@ export const translations = {
       infoLabel: "Қисқача маълумот",
       infoPlaceholder: "Намуна: Самарқандлик ҳунармандларни глобал харидорлар билан боғлайдиган платформа. Асосий эътибор - ҳақиқийлик ва ҳикоялар.",
       investmentLabel: "Бошланғич Сармоя",
-      investmentPlaceholder: "Намуна: $1000 - $5000",
+      investmentPlaceholder: "Намуна: 10 000 000 сўм",
       complexityLabel: "Техник Мураккаблик",
       complexityLevels: ['Осон MVP', 'Ўрта мураккаблик', 'Мураккаб технология'],
       businessModelLabel: "Бизнес Модел",
@@ -485,8 +513,10 @@ export const translations = {
     mainLayout: {
       navDashboard: "Мои Идеи",
       navMarketplace: "Мир Стартаперов",
+      navAnnouncements: "Объявления конкурсов",
       navPartners: "Партнеры",
       navLister: "Разместить Проект",
+      navAccount: "Аккаунт",
       logout: "Выйти",
       balance: "{0} сум",
       topUp: "Пополнить",
@@ -524,6 +554,18 @@ export const translations = {
       contact: "Контакт",
       website: "Веб-сайт"
     },
+
+    announcements: {
+      title: "Объявления конкурсов",
+      subtitle: "Актуальные конкурсы, гранты и акции",
+      errorLoading: "Ошибка при загрузке объявлений.",
+      emptyTitle: "Пока нет объявлений",
+      emptySubtitle: "Скоро здесь появятся новые конкурсы.",
+      deadline: "Дедлайн",
+      viewRules: "Смотреть положение",
+      applyNow: "Подать заявку",
+      publishedAt: "Опубликовано: {0}",
+    },
     
     // LIST PROJECT PAGE
     listProject: {
@@ -559,7 +601,7 @@ export const translations = {
       infoLabel: "Краткая информация",
       infoPlaceholder: "Пример: Платформа, соединяющая ремесленников из Самарканда с глобальными покупателями. Акцент на аутентичности и историях.",
       investmentLabel: "Начальные инвестиции",
-      investmentPlaceholder: "Пример: $1000 - $5000",
+      investmentPlaceholder: "Пример: 10 000 000 сум",
       complexityLabel: "Техническая сложность",
       complexityLevels: ['Простой MVP', 'Средняя сложность', 'Сложная технология'],
       businessModelLabel: "Бизнес-модель",

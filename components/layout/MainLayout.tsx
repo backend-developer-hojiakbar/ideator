@@ -11,7 +11,9 @@ import { DocumentTextIcon } from '../icons/DocumentTextIcon';
 import { DashboardPage } from '../pages/DashboardPage';
 import { InvestorMarketplacePage } from '../pages/InvestorMarketplacePage';
 import { PartnersPage } from '../pages/PartnersPage';
+import { AnnouncementsPage } from '../pages/AnnouncementsPage';
 import { ListProjectPage } from '../pages/ListProjectPage';
+import { AccountPage } from '../pages/AccountPage';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { BellIcon } from '../icons/BellIcon';
@@ -33,11 +35,11 @@ const NavItem: React.FC<{ label: string, icon: React.FC<any>, isActive: boolean,
       onClick={onClick} 
       className={`flex items-center justify-center sm:justify-start gap-2 h-10 w-10 sm:w-auto sm:px-4 rounded-lg transition-all duration-300 flex-shrink-0 ${
         isActive 
-          ? 'bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white' 
-          : 'text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800/50'
+          ? 'bg-white/10 dark:bg-white/10 border border-white/30 text-white shadow-sm' 
+          : 'text-gray-600 dark:text-gray-300 hover:bg-white/10 dark:hover:bg-white/10 hover:border hover:border-white/20'
       }`}
     >
-        <Icon className={`w-5 h-5 transition-colors flex-shrink-0 ${isActive ? 'text-cyan-500' : ''}`} />
+        <Icon className={`w-5 h-5 transition-colors flex-shrink-0 ${isActive ? 'text-cyan-400' : ''}`} />
         <span className="hidden sm:inline">{label}</span>
     </button>
 );
@@ -100,7 +102,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ user, onLogout, onNaviga
         { id: 'dashboard', label: t('mainLayout.navDashboard'), icon: SparklesIcon },
         { id: 'listProject', label: t('mainLayout.navLister'), icon: DocumentTextIcon },
         { id: 'investorMarketplace', label: t('mainLayout.navMarketplace'), icon: BuildingStorefrontIcon },
+        { id: 'announcements', label: t('mainLayout.navAnnouncements'), icon: DocumentTextIcon },
         { id: 'partners', label: t('mainLayout.navPartners'), icon: BuildingStorefrontIcon },
+        { id: 'account', label: t('mainLayout.navAccount'), icon: WalletIcon },
     ];
 
     const handleNavigateToProject = (project: StartupIdea) => {
@@ -123,10 +127,14 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ user, onLogout, onNaviga
                 return <DashboardPage projects={projects} onNavigateToProject={handleNavigateToProject} onStartNewProject={handleStartNewProject} />;
             case 'investorMarketplace':
                 return <InvestorMarketplacePage />;
+            case 'announcements':
+                return <AnnouncementsPage />;
             case 'partners':
                 return <PartnersPage />;
             case 'listProject':
                 return <ListProjectPage projects={projects} user={user} />;
+            case 'account':
+                return <AccountPage />;
             default:
                  return <DashboardPage projects={projects} onNavigateToProject={handleNavigateToProject} onStartNewProject={handleStartNewProject} />;
         }
@@ -194,7 +202,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ user, onLogout, onNaviga
             )}
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto">
+            <main className={`flex-1 ${activePage === 'listProject' ? 'overflow-hidden' : 'overflow-y-auto'}`}>
                 {renderActivePage()}
             </main>
 

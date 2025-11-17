@@ -1,0 +1,31 @@
+/* Fluid responsive scaling for text and spacing across devices */
+
+/* Scale the root font-size with viewport width to make rem-based sizes fluid */
+html { font-size: clamp(14px, 1.2vw + 10px, 16px); }
+
+/* Tighten paddings/gaps on very small screens to prevent overflow/overlap */
+@media (max-width: 380px) {
+  .glass-panel { padding: 0.75rem !important; }
+  .ios-input { padding: 0.6rem !important; }
+  .liquid-button { padding: 0.6rem 0.9rem !important; }
+}
+
+/* Let long nav bars scroll horizontally instead of wrapping awkwardly */
+nav, .overflow-nav { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+
+/* Ensure cards and grids compress better on narrow screens */
+.grid { gap: 0.75rem; }
+@media (min-width: 640px) { .grid { gap: 1rem; } }
+@media (min-width: 1024px) { .grid { gap: 1.25rem; } }
+
+/* Prevent big headings from overflowing tiny screens */
+h1 { font-size: clamp(1.5rem, 2.5vw + 0.6rem, 2rem); }
+h2 { font-size: clamp(1.25rem, 2vw + 0.5rem, 1.75rem); }
+h3 { font-size: clamp(1.1rem, 1.5vw + 0.45rem, 1.4rem); }
+
+/* Truncate long inline labels safely */
+.truncate-1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Safer icon sizing on small screens */
+.icon-sm { width: 1rem; height: 1rem; }
+.icon-md { width: 1.25rem; height: 1.25rem; }

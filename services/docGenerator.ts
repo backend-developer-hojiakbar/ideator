@@ -140,7 +140,7 @@ export const generateFullBusinessPlanDocx = async (idea: StartupIdea): Promise<B
                     width: { size: 100, type: WidthType.PERCENTAGE },
                     rows: [
                         new TableRow({ children: [new TableCell({ children: [new Paragraph("Yil")] }), new TableCell({ children: [new Paragraph("Prognoz qilingan daromad")] })] }),
-                        ...idea.financialProjections.revenueForecast.map(p => new TableRow({ children: [new TableCell({ children: [new Paragraph(`${p.year}-yil`)] }), new TableCell({ children: [new Paragraph(new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(p.revenue))] })] }))
+                        ...idea.financialProjections.revenueForecast.map(p => new TableRow({ children: [new TableCell({ children: [new Paragraph(`${p.year}-yil`)] }), new TableCell({ children: [new Paragraph(new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(p.revenue))] })] }))
                     ],
                 }),
                 createSubHeading("Zararsizlik Nuqtasi Tahlili"), new Paragraph(idea.financialProjections.breakEvenAnalysis),

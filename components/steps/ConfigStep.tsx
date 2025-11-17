@@ -135,9 +135,9 @@ export const ConfigStep: React.FC<ConfigStepProps> = ({ onGenerate, error, onBac
     <div className="h-full">
         <div className="flex flex-col h-full animate-fade-in">
         <div className="relative flex items-center justify-center mb-2">
-            <button
+            <button 
                 onClick={onBack}
-                className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full text-gray-500 hover:bg-black/5 dark:text-gray-400 dark:hover:bg-white/10 transition-colors"
+                className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full text-gray-500 hover:bg-black/5 dark:text-gray-400 dark:hover:bg-white/10 transition-colors font-bold"
                 aria-label={t('back')}
             >
                 <ArrowLeftIcon className="w-6 h-6" />
@@ -193,13 +193,13 @@ export const ConfigStep: React.FC<ConfigStepProps> = ({ onGenerate, error, onBac
             />
             
             <div className="!mt-6">
-                <label htmlFor="golden-ticket-toggle" className="flex items-center cursor-pointer p-4 rounded-lg bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30">
+                <label htmlFor="golden-ticket-toggle" className="flex items-center cursor-pointer p-4 rounded-lg glass-panel border border-red-400/40">
                     <div className="flex-shrink-0">
-                        <TicketIcon className="w-8 h-8 text-yellow-500" />
+                        <TicketIcon className="w-8 h-8 text-red-400" />
                     </div>
                     <div className="ms-4 flex-grow">
-                        <span className="text-lg font-bold text-amber-600 dark:text-amber-400">{t('configStep.goldenTicketLabel')}</span>
-                        <p className="text-xs text-amber-700/80 dark:text-amber-300/80">{t('configStep.goldenTicketDesc')}</p>
+                        <span className="text-lg font-bold text-red-400">{t('configStep.goldenTicketLabel')}</span>
+                        <p className="text-xs text-red-400/90">{t('configStep.goldenTicketDesc')}</p>
                     </div>
                     <div className="relative">
                         <input type="checkbox" id="golden-ticket-toggle" className="sr-only" checked={config.isGoldenTicket} onChange={handleToggleGoldenTicket} />

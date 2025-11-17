@@ -53,6 +53,23 @@ export interface MarketingStrategy {
   keyMessage: string;
 }
 
+export interface ProjectCharter {
+  mission: string;
+  vision: string;
+  objectives: string[];
+  scope: string;
+  successMetrics: string[];
+  governance: string; // nizom va boshqaruv tamoyillari
+  values: string[];
+  stakeholders: string[];
+  assumptions: string[];
+  constraints: string[];
+  outOfScope: string[];
+  dependencies: string[];
+  budgetOverview: string;
+  successCriteria: string[];
+}
+
 export interface RoadmapTask {
   id: string;
   name: string;
@@ -183,6 +200,7 @@ export interface StartupIdea {
   id: string; // Unique identifier for the project
   projectName: string;
   description: string;
+  projectCharter: ProjectCharter;
   leanCanvas: LeanCanvas;
   swotAnalysis: SWOTAnalysis;
   pestleAnalysis: PESTLEAnalysis;
@@ -241,6 +259,7 @@ export interface User {
     email: string;
     isSubscribed: boolean;
     balance: number;
+    isInvestor?: boolean;
 }
 
 export interface ListedProject {
@@ -283,4 +302,17 @@ export interface Notification {
     message: string;
     timestamp: number;
     read: boolean;
+}
+
+export interface Announcement {
+  id: number;
+  title: string;
+  body: string;
+  image_url?: string | null;
+  rules_url?: string;
+  submission_link?: string;
+  deadline?: string | null; // ISO
+  tags: string[];
+  is_active: boolean;
+  created_at: string;
 }

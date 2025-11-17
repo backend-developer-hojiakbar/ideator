@@ -74,6 +74,7 @@ const ProjectCard: React.FC<{ project: ListedWithData }> = ({ project }) => {
 
 export const InvestorMarketplacePage: React.FC = () => {
     const [listedProjects, setListedProjects] = useState<ListedWithData[]>([]);
+    const [isInvestor, setIsInvestor] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [industryFilter, setIndustryFilter] = useState('All');
     const [fundingFilter, setFundingFilter] = useState('All');
@@ -83,7 +84,12 @@ export const InvestorMarketplacePage: React.FC = () => {
     useEffect(() => {
         (async () => {
             try {
-                const resp = await api.listListings(true);
+                // determine investor privilege
+                try {
+                    const me = await api.me();
+                    setIsInvestor(!!me.is_investor);
+                } catch {}
+                const resp = await api.listListings(isInvestor);
                 const mapped: ListedWithData[] = (resp as any[]).map(it => ({
                     projectId: String(it.projectId),
                     projectName: it.projectName,
@@ -102,7 +108,7 @@ export const InvestorMarketplacePage: React.FC = () => {
                 setListedProjects([]);
             }
         })();
-    }, []);
+    }, [isInvestor]);
 
     const filteredProjects = useMemo(() => {
         return listedProjects.filter(project => {

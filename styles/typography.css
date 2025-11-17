@@ -1,0 +1,18 @@
+/* Global typography overrides to improve readability without changing layout boxes */
+
+/* Slightly enlarge commonly used small text utilities */
+.text-xs { font-size: 0.9rem !important; line-height: 1.5 !important; }
+.text-sm { font-size: 1rem !important; line-height: 1.6 !important; }
+.text-base { font-size: 1.0625rem !important; line-height: 1.65 !important; }
+
+/* Headings: a bit bolder and clearer */
+h1, h2, h3, h4 { font-weight: 800 !important; letter-spacing: -0.01em; }
+
+/* Paragraphs and list items: increase line height for clarity */
+p, li { line-height: 1.65; }
+
+/* Improve rendering */
+html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Prose blocks (AI outputs, etc.) */
+.prose, .prose-sm { font-size: 1.0625rem; line-height: 1.7; }

@@ -22,6 +22,26 @@ const getSchema = (lang: Language) => ({
     properties: {
         projectName: { type: Type.STRING, description: "Loyiha uchun qisqa, esda qolarli va jozibali nom." },
         description: { type: Type.STRING, description: "Loyiha haqida 1-2 jumlada batafsil tavsif." },
+        projectCharter: {
+            type: Type.OBJECT,
+            properties: {
+                mission: { type: Type.STRING, description: "Loyihaning asosiy missiyasi." },
+                vision: { type: Type.STRING, description: "3-5 yillik istiqboldagi tasavvur (vision)." },
+                objectives: { type: Type.ARRAY, items: { type: Type.STRING }, description: "SMART maqsadlar ro'yxati." },
+                scope: { type: Type.STRING, description: "Dastlabki bosqichda qamrov va chegaralar (scope)." },
+                successMetrics: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Muvaffaqiyat metrikalari (KPI)." },
+                governance: { type: Type.STRING, description: "Nizom, boshqaruv va qarorlar qabul qilish tamoyillari." },
+                values: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Asosiy qadriyatlar." },
+                stakeholders: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Asosiy manfaatdor tomonlar (stakeholders)." },
+                assumptions: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Asosiy farazlar (assumptions)." },
+                constraints: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Cheklovlar (constraints)." },
+                outOfScope: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Qamrovga kirmaydigan ishlar (out of scope)." },
+                dependencies: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Bog'liqliklar (dependencies)." },
+                budgetOverview: { type: Type.STRING, description: "Byudjetning umumiy ko'rinishi." },
+                successCriteria: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Muvaffaqiyat mezonlari." },
+            },
+            required: ['mission', 'vision', 'objectives', 'scope', 'successMetrics', 'governance', 'values', 'stakeholders', 'assumptions', 'constraints', 'outOfScope', 'dependencies', 'budgetOverview', 'successCriteria']
+        },
         leanCanvas: {
             type: Type.OBJECT,
             properties: {
@@ -286,7 +306,7 @@ const getSchema = (lang: Language) => ({
             required: ['risks', 'summary']
         }
     },
-    required: ['projectName', 'description', 'leanCanvas', 'swotAnalysis', 'pestleAnalysis', 'financialProjections', 'marketingStrategy', 'projectRoadmap', 'pitchDeck', 'legalTemplates', 'brandingGuide', 'actionableChecklist', 'competitiveAnalysis', 'targetAudiencePersonas', 'monetizationStrategy', 'teamStructure', 'riskAnalysis']
+    required: ['projectName', 'description', 'projectCharter', 'leanCanvas', 'swotAnalysis', 'pestleAnalysis', 'financialProjections', 'marketingStrategy', 'projectRoadmap', 'pitchDeck', 'legalTemplates', 'brandingGuide', 'actionableChecklist', 'competitiveAnalysis', 'targetAudiencePersonas', 'monetizationStrategy', 'teamStructure', 'riskAnalysis']
 });
 
 const generateBriefIdeaConcept = async (config: IdeaConfiguration, lang: Language): Promise<string> => {
@@ -388,7 +408,7 @@ export const generateStartupIdea = async (config: IdeaConfiguration, lang: Langu
 
         **Generatsiya qilingan unikal g'oya konsepsiyasi:** "${uniqueIdeaConcept}"
 
-        Bu g'oya quyidagi foydalanuvchi kiritgan parametrlarga asoslanib kengaytirilishi kerak:
+        Bu g'oya quyidagi foydalanuvchi kiritgan parametrlarga asoslanib KENGAYTIRILISHI kerak:
         - Soha: ${config.industry}
         - Boshlang'ich sarmoya: ${config.investment}
         - Murakkablik darajasi: ${config.complexity}
@@ -397,17 +417,47 @@ export const generateStartupIdea = async (config: IdeaConfiguration, lang: Langu
         ${config.briefInfo ? `- Qisqacha ma'lumot: "${config.briefInfo}"` : ''}
         ${goldenTicketPrompt}
 
-        SUPER-MUHIM TALABLAR:
-        1.  **MUSTAHKAM "XANDAQLAR" (STRONG "MOATS"):** G'oyada raqobatchilar osonlikcha nusxa ko'chira olmaydigan kuchli himoya mexanizmlari ("moats") bo'lishi shart. Har bir bo'limda (ayniqsa, "Adolatsiz Ustunlik" va "Marketing") bu xandaqlarni qanday qurish va mustahkamlashni aniq ko'rsat. Masalan, tarmoq effekti, noyob texnologiya, eksklyuziv hamkorliklar, kuchli brend, ma'lumotlarga asoslangan ustunlik.
-        2.  **GIPERMAHALLIYLASHTIRISH + GLOBAL MASSHTAB:** Strategiya bir vaqtning o'zida O'zbekiston bozorining mentaliteti, ehtiyojlari va infratuzilmasiga chuqur moslashtirilgan ("gipermahalliy") bo'lsin, lekin ayni paytda Markaziy Osiyo va boshqa global bozorlarga osonlikcha kengayish ("masshtablanish") imkoniyatiga ega bo'lsin. Kengayish rejasini "Project Roadmap"da aks ettir.
-        3.  **O'SISH XAKERLIGI (GROWTH HACKING):** Marketing strategiyasida O'zbekiston uchun mos, kam byudjetli, ammo yuqori samarali "o'sish xakerligi" (growth hacking) usullarini (masalan, virusli marketing, kuchli referal dasturlar, Telegram kanallari orqali kreativ targ'ibot, mahalliy influencerlar bilan hamkorlik) batafsil yoritib ber.
-        4.  **CHUQUQLIK VA AMALIYLIK:** Har bir bo'limni o'ta batafsil va amaliy misollar bilan to'ldir. Bu shunchaki reja emas, balki A seriya investorni ishontiradigan va eng yaxshi mutaxassislarni jamoaga jalb qila oladigan hujjat bo'lsin. Raqamlar, tahlillar va strategiyalar aniq va asosli bo'lsin.
-        5.  **MONETIZATSIYA DARAJASI:** Monetizatsiya strategiyasi bo'limida LTV > 3x CAC munosabatini hisobga olgan holda, har bir tarif uchun taxminiy LTV va CAC raqamlarini keltir. Kengayish Orqali Daromad (Expansion Revenue) potentsialini bahola.
+        SUPER-MUHIM TALABLAR (chuqurlikni qat'iy ta'minla):
+        1)  MOATS (XANDAQLAR): har bo'limda (ayniqsa "unfairAdvantage", "marketingStrategy", "competitiveAnalysis") nusxa ko'chirishni qiyinlashtiradigan himoyalar (tarmoq effekti, eksklyuziv hamkorliklar, ma'lumotlarga asoslangan ustunlik, brend, o'ziga xos IP) qanday qurilishi va 12—24 oyda qanday mustahkamlanishi bosqichma-bosqich yozilsin.
+        2)  GIPERMAHALLIYLASHTIRISH + GLOBAL MASSHTAB: O'zbekistonga moslashtirish (to'lov/loyiha jarayonlari, til, qonunchilik) va Markaziy Osiyo/Globalga chiqish strategiyasi aniq yozilsin. "projectRoadmap"da ichki -> mintaqaviy -> global fazalar ko'rsatilishi shart.
+        3)  GROWTH HACKING: Telegram/Instagram/mahalliy influencerlar, referral dastur, hamjamiyatlar va offline hamkorliklar bo'yicha aniq, byudjetga sezgir (uzluksiz) taktikalar rejalari keltirilsin.
+        4)  RAQAMLI CHUQUQLIK: Har bo'limda raqamlar, foizlar, segment ulushlari, taxminlar, KPI va o'lchovlar bilan yoz. Fikrlarni umumiy emas, amaliy va o'lchanadigan qil.
+        5)  MONETIZATSIYA: LTV > 3x CAC tamoyiliga mos, har bir tarifda (kamida 3 ta) LTV va CAC bo'yicha taxminiy qiymatlar va ularni kamaytirish/oshirish taktikasi berilsin. Expansion Revenue imkoniyatlari yozilsin.
 
-        Natijani JSON formatida, yuqoridagi sxema asosida qaytar. Barcha matnlarni ${languageNames[lang]} tilida yoz.
-        Roadmapdagi task.id'lar unikal bo'lishi kerak.
-        ActionableChecklist'dagi item.id'lar unikal bo'lishi kerak.
-        PitchDeck kamida 12 ta, har biri aniq maqsadga yo'naltirilgan slayddan iborat bo'lsin.
+        MINIMAL TALABLAR (har biri bajarilishi shart):
+        - leanCanvas.problem: kamida 5 aniq muammo
+        - leanCanvas.solution: muammolarga mos kamida 5 yechim
+        - leanCanvas.keyMetrics: kamida 6 KPI (MAU, MRR, ARPU, LTV, CAC, NPS va h.k.)
+        - leanCanvas.customerSegments: kamida 5 segment (bitta segmentga nom + 1 jumla tavsif)
+        - swotAnalysis: har bir toifa (S/W/O/T) kamida 6 band
+        - competitiveAnalysis.competitors: kamida 5 raqib; har biri uchun kuchli/zaif tomonlar va "strategyToBeat" aniq bo'lsin
+        - targetAudiencePersonas.personas: kamida 4 persona, har biri uchun demografiya, maqsadlar (≥5), pain points (≥5), hikoya
+        - monetizationStrategy.pricingTiers: kamida 3 tarif (Free/Standard/Pro yoki mos), narx, funksiyalar (≥8 har birida), justification’da LTV/CAC hisob mantig'i bo‘lsin
+        - financialProjections.revenueForecast: kamida 5 yil, yilma-yil ongli, bosqichma-bosqich o‘sish raqamlari FAQAT UZS (so'm)da; raqamlar NUMBER bo‘lsin (matn emas); 1–2-yillarda konservativ (2x–5x) o‘sish, keyin sekinlashish (1.5x–3x); har yil uchun ARPU, konversiyalar, churn/retention va foydalanuvchi soni bo‘yicha asos keltirilgan bo‘lsin; breakEvenAnalysis’da BEP oy/nuqta va asosiy farazlar aniq keltirilsin
+        - marketingStrategy: targetAudience, kanallar (≥8), keyMessage; kanallar bo‘yicha 90 kunlik ijro rejasi
+        - projectRoadmap.phases: kamida 4—6 faza; umumiy tasklar soni ≥ 20; task.id’lar unikal; dependencies ishlatilgan; sanalar realistik
+        - riskAnalysis.risks: kamida 10 risk (likelihood/impact to'ldirilgan), mitigation amaliy va o‘lchanadigan
+        - pitchDeck: kamida 15 slayd; har birida 5—8 bullet; "visualSuggestion" iloji bo'lsa qo‘shilsin
+        - actionableChecklist: 12—20 bandli birinchi qadamlar
+
+        PROJECT CHARTER (NIZOM) bo'limida quyidagilar aniq, UZOQ va keng ko'lamli bo'lsin (qisqa yozma):
+        - mission: ijtimoiy/iqtisodiy ta'sir bilan; kamida 2 paragraf, aniq muammo va yechimga bog‘langan
+        - vision: 3—5 yillik yo'l xaritasi; kamida 2 paragraf; hududiy (UZB → MO → Global) va mahsulot kengayishi bosqichma-bosqich
+        - objectives: yillik (≥5) va choraklik (≥5) SMART maqsadlar; har birida o‘lchov, mas'ul va muddat
+        - scope/outOfScope: aniq chegaralar; har biri (scope va outOfScope) ≥6 band; "must-do" va "not-now" ro‘yxatlari ajratilgan
+        - successMetrics: KPI ro‘yxati (≥8) va ularning hisob formulalari/ma'lumot manbalari
+        - governance/values/stakeholders/assumptions/constraints/dependencies/budgetOverview/successCriteria: har biri bo‘yicha amaliy, o‘lchanadigan, aniq matn; budgetOverview’da asosiy xarajat toifalari va taqsimot % lari
+
+        FORMAT TALABLARI:
+        - Natija JSON bo‘lsin va berilgan sxemaga mos kelishi shart.
+        - Barcha matnlar ${languageNames[lang]} tilida.
+        - Roadmap dagi task.id’lar unikal bo‘lsin.
+        - ActionableChecklist dagi item.id’lar unikal bo‘lsin.
+        - Matnda umumiy gaplardan qoch; har band amaliy va o‘lchanadigan bo‘lsin.
+        - PitchDeck kamida 15 slayd bo‘lsin.
+        - Valyuta: barcha moliyaviy raqamlar (daromad, ARPU va h.k.) UZS (so'm)da bo‘lsin; revenueForecast.revenue NUMBER bo‘lsin (matn emas, vergul/bo‘shliq qo‘ymang).
+        - Realistiklik: yilma-yil o‘sishlar asoslangan bo‘lsin (bozor hajmi, konversiya, ARPU, churn/retention); fantastik 100x sakrashlardan qoch.
+        - Unit economics: LTV, CAC, CAC payback (≤12 oy) va gross margin bo‘yicha qisqa hisob-mantiq keltirilsin.
     `;
 
     const response = await ai.models.generateContent({

@@ -8,7 +8,7 @@ interface FinancialCalculatorProps {
 export const FinancialCalculator: React.FC<FinancialCalculatorProps> = ({ projections }) => {
   
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(amount);
   };
 
   return (

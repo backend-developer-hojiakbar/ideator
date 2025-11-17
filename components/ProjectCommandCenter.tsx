@@ -134,11 +134,6 @@ export const ProjectCommandCenter: React.FC<ProjectCommandCenterProps> = ({ idea
                             Startapingizni shu yerdan boshqaring. Vazifalarni kuzatib boring, KPI'larni tahlil qiling va kerak bo'lganda AI Co-Pilot'dan yordam oling.
                         </p>
                     </div>
-                    <div className="flex-shrink-0" title="Grant va akseleratsiya dasturlariga kirish uchun sifat belgisi. Barcha vazifalarni bajarganingizdan so'ng faollashadi.">
-                        <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-400/30 cursor-help">
-                            Venture Passport: Tasdiqlanmagan
-                        </span>
-                    </div>
                 </div>
             </div>
             
@@ -176,8 +171,8 @@ export const ProjectCommandCenter: React.FC<ProjectCommandCenterProps> = ({ idea
                                                 <MagicWandIcon className="w-5 h-5" />
                                             </button>
                                             <div className="text-xs mt-2 flex gap-2 text-gray-500 dark:text-gray-400">
-                                                {colIndex > 0 && <button onClick={() => moveTask(task.id, column.id, boardData.columnOrder[colIndex - 1])} className="hover:text-gray-800 dark:hover:text-white">&larr; Orqaga</button>}
-                                                {colIndex < boardData.columnOrder.length - 1 && <button onClick={() => moveTask(task.id, column.id, boardData.columnOrder[colIndex + 1])} className="hover:text-gray-800 dark:hover:text-white">Oldinga &rarr;</button>}
+                                                {colIndex > 0 && <button onClick={() => moveTask(task.id, column.id, boardData.columnOrder[colIndex - 1])} className="font-bold hover:text-gray-800 dark:hover:text-white">&larr; Orqaga</button>}
+                                                {colIndex < boardData.columnOrder.length - 1 && <button onClick={() => moveTask(task.id, column.id, boardData.columnOrder[colIndex + 1])} className="font-bold hover:text-gray-800 dark:hover:text-white">Oldinga &rarr;</button>}
                                             </div>
                                         </div>
                                     ))}
