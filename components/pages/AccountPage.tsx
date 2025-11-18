@@ -105,7 +105,7 @@ export const AccountPage: React.FC = () => {
                 </div>
               )}
               <div className="flex items-center justify-between py-2">
-                <span className="text-gray-600 dark:text-gray-300">Taklif qilingan do\'stlar</span>
+                <span className="text-gray-600 dark:text-gray-300">Taklif qilingan do'stlar</span>
                 <span className="font-semibold text-gray-800 dark:text-gray-100">{me.referrals_count ?? 0}</span>
               </div>
             </div>

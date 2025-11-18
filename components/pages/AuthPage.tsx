@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User } from '../../types';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -16,6 +15,20 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
   const [workplace, setWorkplace] = useState('');
   const [referralCode, setReferralCode] = useState('');
   const { t } = useLanguage();
+
+  // Auto-fill referral code for registration flow
+  useEffect(() => {
+    if (isLogin) return; // only for register tab
+    // do not overwrite if user already typed
+    if (referralCode && referralCode.trim().length > 0) return;
+    try {
+      const url = new URL(window.location.href);
+      const refParam = (url.searchParams.get('ref') || '').trim();
+      const defaultAdminRef = ((import.meta as any).env?.VITE_DEFAULT_REF || '').trim();
+      const candidate = refParam || defaultAdminRef;
+      if (candidate) setReferralCode(candidate.toUpperCase());
+    } catch {}
+  }, [isLogin]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,22 +114,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
                         </div>
                       </div>
                     )}
-                    {!isLogin && (
-                      <div>
-                        <label htmlFor="referral_code" className="block text-sm font-medium text-gray-800 dark:text-gray-100">Referral kod (ixtiyoriy)</label>
-                        <div className="mt-1">
-                          <input
-                            id="referral_code"
-                            name="referral_code"
-                            type="text"
-                            value={referralCode}
-                            onChange={(e) => setReferralCode(e.target.value)}
-                            className="w-full p-3 text-sm ios-input"
-                            placeholder="Masalan: 8 BELGI (ABCDEFG1)"
-                          />
-                        </div>
-                      </div>
-                    )}
+                    {/* Referral input hidden intentionally: auto-filled from URL or default and submitted in background */}
                     <div>
                         <label htmlFor="password"  className="block text-sm font-medium text-gray-800 dark:text-gray-100">{t('auth.passwordLabel')}</label>
                         <div className="mt-1">

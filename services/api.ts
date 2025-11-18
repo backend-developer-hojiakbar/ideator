@@ -26,13 +26,23 @@ async function request(path: string, options: RequestInit = {}) {
   const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
   const headers: Record<string, string> = isFormData ? {} : { 'Content-Type': 'application/json' };
   const token = getAccessToken();
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  // Do not attach token for open auth endpoints to avoid JWT 401 on stale/invalid token
+  const p = path.startsWith('/') ? path.slice(1) : path;
+  const isOpenAuth = p.startsWith('auth/register') || p.startsWith('auth/login');
+  if (token && !isOpenAuth) headers['Authorization'] = `Bearer ${token}`;
   // Ensure single slash between base and path
   const url = `${API_BASE}${path.startsWith('/') ? path : `/${path}`}`;
   const res = await fetch(url, { ...options, headers: { ...headers, ...(options.headers || {}) } });
   if (!res.ok) {
     let message = 'Request failed';
     try { message = await res.text(); } catch {}
+    // If token invalid, clear it so next open calls won't carry bad JWT
+    try {
+      const parsed = JSON.parse(message);
+      if (parsed?.code === 'token_not_valid') {
+        clearTokens();
+      }
+    } catch {}
     throw new Error(message || `Request failed: ${res.status}`);
   }
   if (res.status === 204) return null;
