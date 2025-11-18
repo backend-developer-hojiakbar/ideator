@@ -1,5 +1,5 @@
 // Do not end with trailing slash to avoid // when joining paths
-export const API_BASE = ((import.meta as any).env?.VITE_API_BASE || 'http://127.0.0.1:8000/api').replace(/\/$/, '');
+export const API_BASE = ((import.meta as any).env?.VITE_API_BASE || 'https://ideatorapi.cdcgroup.uz/api').replace(/\/$/, '');
 
 export type LoginResponse = {
   access: string;
