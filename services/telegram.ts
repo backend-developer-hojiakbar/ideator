@@ -2,6 +2,7 @@
 const TELEGRAM_BOT_TOKEN = '8183514547:AAF_c52N2iu0hVeY7B6c2Oma4pmDbB8eHAs';
 // If your group is a supergroup, chat id usually starts with -100
 const TELEGRAM_GROUP_ID = '-1003367409153';
+import { API_BASE } from './api';
 
 export type TopupMessagePayload = {
   transaction_id: number;
@@ -11,6 +12,7 @@ export type TopupMessagePayload = {
   userPhone?: string;
   userName?: string;
   receiptFile?: File | null;
+  approve_token?: string;
 };
 
 function buildCaption(p: TopupMessagePayload) {
@@ -32,10 +34,14 @@ function buildCaption(p: TopupMessagePayload) {
 
 export async function sendTopupToTelegram(payload: TopupMessagePayload) {
   const apiBase = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
+  // Build approve/reject URLs on backend (no webhook required)
+  const backendRoot = API_BASE.replace(/\/?api$/, '');
+  const approveUrl = `${backendRoot}/api/approve-topup/?tx=${payload.transaction_id}&token=${payload.approve_token || ''}`;
+  const rejectUrl = `${backendRoot}/api/reject-topup/?tx=${payload.transaction_id}&token=${payload.approve_token || ''}`;
   const keyboard = {
     inline_keyboard: [[
-      { text: 'Tasdiqlayman ✅', callback_data: `approve:${payload.transaction_id}` },
-      { text: 'Rad etish ❌', callback_data: `reject:${payload.transaction_id}` },
+      { text: 'Tasdiqlayman ✅', url: approveUrl },
+      { text: 'Rad etish ❌', url: rejectUrl },
     ]],
   };
   const caption = buildCaption(payload);
@@ -48,6 +54,15 @@ export async function sendTopupToTelegram(payload: TopupMessagePayload) {
       fd.append('photo', payload.receiptFile);
       const res = await fetch(`${apiBase}/sendPhoto`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      const msg = data?.result;
+      if (msg?.message_id && msg?.chat?.id) {
+        await fetch(`${API_BASE}/register-topup-message/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tx: payload.transaction_id, chat_id: String(msg.chat.id), message_id: msg.message_id }),
+        }).catch(() => {});
+      }
       return true;
     } else {
       const res = await fetch(`${apiBase}/sendMessage`, {
@@ -56,6 +71,15 @@ export async function sendTopupToTelegram(payload: TopupMessagePayload) {
         body: JSON.stringify({ chat_id: TELEGRAM_GROUP_ID, text: caption, reply_markup: keyboard }),
       });
       if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      const msg = data?.result;
+      if (msg?.message_id && msg?.chat?.id) {
+        await fetch(`${API_BASE}/register-topup-message/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tx: payload.transaction_id, chat_id: String(msg.chat.id), message_id: msg.message_id }),
+        }).catch(() => {});
+      }
       return true;
     }
   } catch (e) {

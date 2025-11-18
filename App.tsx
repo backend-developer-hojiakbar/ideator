@@ -193,6 +193,7 @@ const AppContent: React.FC = () => {
           userPhone: user.email,
           userName: undefined,
           receiptFile: receipt || null,
+          approve_token: result?.approve_token,
         });
         const me = await api.me();
         setUser({
