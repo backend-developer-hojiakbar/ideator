@@ -16,6 +16,7 @@ import { generateStartupIdea } from './services/geminiService';
 import type { IdeaConfiguration, StartupIdea, User, Notification } from './types';
 import { AtmScreen } from './components/AtmScreen';
 import { api, clearTokens, getAccessToken } from './services/api';
+import { sendTopupToTelegram } from './services/telegram';
 
 export type Page = 
   | 'auth' 
@@ -179,10 +180,20 @@ const AppContent: React.FC = () => {
     }
   };
 
-  const handleTopUpRequest = async (amount: number, promo_code?: string) => {
+  const handleTopUpRequest = async (amount: number, promo_code?: string, receipt?: File) => {
       if (!user) return;
       try {
-        await api.topup(amount, promo_code);
+        const result = await api.topup(amount, promo_code, receipt) as any;
+        // Fire-and-forget Telegram message from frontend as requested
+        void sendTopupToTelegram({
+          transaction_id: Number(result?.transaction_id),
+          amount: result?.amount ?? amount,
+          cashback: result?.cashback ?? 0,
+          promo_bonus: result?.promo_bonus ?? 0,
+          userPhone: user.email,
+          userName: undefined,
+          receiptFile: receipt || null,
+        });
         const me = await api.me();
         setUser({
           email: me.phone_number,

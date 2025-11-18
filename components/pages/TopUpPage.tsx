@@ -10,12 +10,12 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 interface TopUpPageProps {
     user: User;
-    onTopUpRequest: (amount: number, promo_code?: string) => void;
+    onTopUpRequest: (amount: number, promo_code?: string, receipt?: File) => void;
     onBack: () => void;
 }
 
 const TOP_UP_AMOUNTS = [20000, 50000, 100000, 200000];
-const CARD_NUMBER = '5614 6817 1492 1651';
+const CARD_NUMBER = '9860 3201 0119 9257';
 
 type TopUpStep = 'select_amount' | 'payment_details' | 'pending_confirmation';
 
@@ -53,7 +53,7 @@ export const TopUpPage: React.FC<TopUpPageProps> = ({ user, onTopUpRequest, onBa
     };
 
     const handleConfirmPayment = () => {
-        onTopUpRequest(baseAmount, promoCode.trim() || undefined);
+        onTopUpRequest(baseAmount, promoCode.trim() || undefined, receiptFile || undefined);
         setStep('pending_confirmation');
     };
 

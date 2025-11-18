@@ -1,5 +1,5 @@
 // Do not end with trailing slash to avoid // when joining paths
-const API_BASE = ((import.meta as any).env?.VITE_API_BASE || 'http://ideatorapi.cdcgroup.uz/api').replace(/\/$/, '');
+export const API_BASE = ((import.meta as any).env?.VITE_API_BASE || 'http://127.0.0.1:8000/api').replace(/\/$/, '');
 
 export type LoginResponse = {
   access: string;
@@ -23,7 +23,8 @@ export function clearTokens() {
 }
 
 async function request(path: string, options: RequestInit = {}) {
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
+  const headers: Record<string, string> = isFormData ? {} : { 'Content-Type': 'application/json' };
   const token = getAccessToken();
   if (token) headers['Authorization'] = `Bearer ${token}`;
   // Ensure single slash between base and path
@@ -55,7 +56,16 @@ export const api = {
   markNotificationsRead: () => request('notifications/mark-read/', { method: 'POST' }),
 
   // Wallet
-  topup: (amount: number, promo_code?: string) => request('wallet/topup/', { method: 'POST', body: JSON.stringify(promo_code ? { amount, promo_code } : { amount }) }),
+  topup: (amount: number, promo_code?: string, receipt?: File) => {
+    if (receipt) {
+      const fd = new FormData();
+      fd.append('amount', String(amount));
+      if (promo_code) fd.append('promo_code', promo_code);
+      fd.append('receipt', receipt);
+      return request('wallet/topup/', { method: 'POST', body: fd });
+    }
+    return request('wallet/topup/', { method: 'POST', body: JSON.stringify(promo_code ? { amount, promo_code } : { amount }) });
+  },
 
   // Projects
   startProject: (payload: { project_name: string; description: string; config?: number | null; data: any }) =>
